@@ -39,7 +39,7 @@ Este proyecto utiliza las tecnologías más punteras del desarrollo Android actu
 
 El código está organizado siguiendo principios de arquitectura limpia:
 
-- `ui/`: Pantallas principales (`HomeScreen`, `DetailsScreen`, `CompareScreen`) y componentes reutilizables de Compose.
+- `ui/`: Pantallas principales y componentes reutilizables de Compose.
 - `viewmodel/`: Lógica de negocio y gestión del estado de la interfaz.
 - `data/`: Modelos de datos de las IAs, repositorios y fuentes de información.
 - `navigation/`: Configuración de rutas y navegación entre pantallas.
