@@ -103,7 +103,10 @@ dependencies {
     // Motor de red necesario
     implementation(libs.ktor.client.android)
 
-    // Ksp
-    ksp(libs.hilt.compiler)
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
 
 }
