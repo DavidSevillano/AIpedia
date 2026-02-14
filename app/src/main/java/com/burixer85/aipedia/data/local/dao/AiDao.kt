@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AiDao {
     @Query("SELECT * FROM ai")
-    suspend fun getAllAis(): Flow<List<AiEntity>>
+    suspend fun getAllAis(): List<AiEntity>
 
     @Query("SELECT * FROM ai WHERE id = :aiId")
     suspend fun getAiById(aiId: String): AiEntity?
