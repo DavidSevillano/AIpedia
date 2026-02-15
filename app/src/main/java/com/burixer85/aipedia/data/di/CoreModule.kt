@@ -1,4 +1,4 @@
-package com.burixer85.aipedia
+package com.burixer85.aipedia.data.di
 
 import android.content.Context
 import androidx.room.Room

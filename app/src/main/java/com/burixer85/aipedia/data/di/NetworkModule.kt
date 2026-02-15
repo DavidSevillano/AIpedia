@@ -1,5 +1,6 @@
-package com.burixer85.aipedia
+package com.burixer85.aipedia.data.di
 
+import com.burixer85.aipedia.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

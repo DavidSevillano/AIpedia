@@ -2,15 +2,18 @@ package com.burixer85.aipedia.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.burixer85.aipedia.data.local.entities.AiEntity
+import androidx.room.Transaction
+import com.burixer85.aipedia.data.local.entities.AiWithCategories
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AiDao {
+    @Transaction
     @Query("SELECT * FROM ai")
-    suspend fun getAllAis(): List<AiEntity>
+    fun getAllAis(): Flow<List<AiWithCategories>>
 
+    @Transaction
     @Query("SELECT * FROM ai WHERE id = :aiId")
-    suspend fun getAiById(aiId: String): AiEntity?
+    fun getAiById(aiId: String): AiWithCategories?
 
 }

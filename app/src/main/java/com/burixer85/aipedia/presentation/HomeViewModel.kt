@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor(
     private fun loadData() {
         viewModelScope.launch {
             try {
-                val aiFromDb = supabase.postgrest["ai_tools"]
+                val aiFromDb = supabase.postgrest["ai"]
                     .select()
                     .decodeList<Ai>()
 
@@ -41,7 +41,6 @@ class HomeViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = false) }
-                Log.e("HOME_VM", "Error cargando datos: ${e.message}")
             }
         }
     }
