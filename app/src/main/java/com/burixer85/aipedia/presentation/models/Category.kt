@@ -6,5 +6,6 @@ import java.util.UUID
 @Serializable
 data class Category(
     val id: String,
-    val name: String
+    val name: String,
+    val icon: String
 )

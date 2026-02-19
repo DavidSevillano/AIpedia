@@ -12,7 +12,7 @@ data class AiEntity(
     val description: String,
     val website: String,
     @ColumnInfo(name = "price_model")
-    val priceModel: Double,
+    val priceModel: String,
     @ColumnInfo(name = "logo_url")
     val logoUrl: String
 )

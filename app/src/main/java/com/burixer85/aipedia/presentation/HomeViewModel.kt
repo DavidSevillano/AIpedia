@@ -1,6 +1,5 @@
 package com.burixer85.aipedia.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.burixer85.aipedia.presentation.models.Ai
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val supabase: SupabaseClient
+    private val supabase: SupabaseClient,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeScreenUI(isLoading = true))
