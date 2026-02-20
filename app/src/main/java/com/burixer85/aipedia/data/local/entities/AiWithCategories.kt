@@ -3,6 +3,7 @@ package com.burixer85.aipedia.data.local.entities
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
+import com.burixer85.aipedia.domain.models.Ai
 
 
 data class AiWithCategories(
@@ -18,3 +19,15 @@ data class AiWithCategories(
     )
     val categories: List<CategoryEntity>
 )
+
+fun AiWithCategories.toDomain(): Ai {
+    return Ai(
+        id = this.ai.id,
+        name = this.ai.name,
+        description = this.ai.description,
+        website = this.ai.website,
+        priceModel = this.ai.priceModel,
+        logoUrl = this.ai.logoUrl,
+        categories = this.categories.map { it.toDomain() }
+    )
+}

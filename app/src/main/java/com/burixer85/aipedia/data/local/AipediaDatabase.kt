@@ -9,7 +9,8 @@ import com.burixer85.aipedia.data.local.entities.AiEntity
 import com.burixer85.aipedia.data.local.entities.CategoryEntity
 
 
-@Database(entities = [AiEntity::class, CategoryEntity::class, AiCategoryCrossRef::class],
+@Database(
+    entities = [AiEntity::class, CategoryEntity::class, AiCategoryCrossRef::class],
     version = 1,
     exportSchema = false
 )
