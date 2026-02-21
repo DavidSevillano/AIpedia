@@ -1,8 +1,8 @@
-package com.burixer85.aipedia.data.local.entities
+package com.burixer85.aipedia.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.burixer85.aipedia.domain.models.Category
+import com.burixer85.aipedia.domain.model.Category
 
 @Entity(tableName = "categories")
 data class CategoryEntity(

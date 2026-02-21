@@ -1,8 +1,9 @@
-package com.burixer85.aipedia.data.local.entities
+package com.burixer85.aipedia.data.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.SerialName
 
 @Entity(tableName = "ai")
 data class AiEntity(

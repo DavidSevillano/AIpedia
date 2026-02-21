@@ -1,9 +1,9 @@
-package com.burixer85.aipedia.data.local.entities
+package com.burixer85.aipedia.data.local.entity
 
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
-import com.burixer85.aipedia.domain.models.Ai
+import com.burixer85.aipedia.domain.model.Ai
 
 
 data class AiWithCategories(

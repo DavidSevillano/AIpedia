@@ -25,7 +25,8 @@ object CoreModule {
             context,
             AipediaDatabase::class.java,
             "ai_database",
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

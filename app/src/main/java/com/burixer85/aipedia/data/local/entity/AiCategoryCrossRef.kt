@@ -1,4 +1,4 @@
-package com.burixer85.aipedia.data.local.entities
+package com.burixer85.aipedia.data.local.entity
 
 import androidx.room.Entity
 

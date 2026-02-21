@@ -9,19 +9,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.burixer85.aipedia.presentation.components.AiCard
-import java.util.UUID
+import com.burixer85.aipedia.presentation.component.AiCard
 
 @Composable
 fun HomeScreen(
@@ -61,7 +57,7 @@ fun HomeScreen(
                     AiCard(
                         name = ai.name,
                         description = ai.description,
-                        price = ai.price_model, // o formateado
+                        price = ai.price_model,
                         logoUrl = ai.logo_url,
                         onClick = { onAiClick(ai.id) }
                     )
