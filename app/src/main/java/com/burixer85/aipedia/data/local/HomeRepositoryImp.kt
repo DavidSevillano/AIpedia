@@ -1,27 +1,22 @@
 package com.burixer85.aipedia.data.local
 
 import android.util.Log
-import androidx.compose.foundation.layout.size
 import com.burixer85.aipedia.data.local.dao.AiDao
 import com.burixer85.aipedia.data.local.dao.CategoryDao
 import com.burixer85.aipedia.data.local.entity.AiCategoryCrossRef
-import com.burixer85.aipedia.data.local.entity.AiEntity
-import com.burixer85.aipedia.data.local.entity.CategoryEntity
 import com.burixer85.aipedia.data.local.entity.toDomain
 import com.burixer85.aipedia.domain.repository.HomeRepository
 import com.burixer85.aipedia.domain.model.Ai
 import com.burixer85.aipedia.domain.model.toData
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.postgrest.from
-import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.io.IOException
-import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import io.github.jan.supabase.postgrest.query.Columns
+import com.burixer85.aipedia.data.local.entity.AiFeatureCrossRef
+import com.burixer85.aipedia.data.local.entity.FeatureEntity
+import com.burixer85.aipedia.domain.model.toData
 
 class HomeRepositoryImp @Inject constructor(
     private val aiDao: AiDao,
@@ -39,7 +34,7 @@ class HomeRepositoryImp @Inject constructor(
     override suspend fun loadAndCacheInitialData() {
         try {
             val supabaseAis = supabase.from("ai")
-                .select(columns = Columns.raw("*, categories(*)"))
+                .select(columns = Columns.raw("*, categories(*), features(*)"))
                 .decodeList<Ai>()
 
             if (supabaseAis.isEmpty()) return
@@ -50,15 +45,28 @@ class HomeRepositoryImp @Inject constructor(
                 ai.categories.map { it.toData() }
             }.distinctBy { it.id }
 
-            val crossRefs = supabaseAis.flatMap { ai ->
+            val categoryRefs = supabaseAis.flatMap { ai ->
                 ai.categories.map { cat ->
                     AiCategoryCrossRef(aiId = ai.id, categoryId = cat.id)
                 }
             }
 
+            val featureEntities = supabaseAis.flatMap { ai ->
+                ai.features?.map { it.toData() } ?: emptyList()
+            }.distinctBy { it.id }
+
+            val featureRefs = supabaseAis.flatMap { ai ->
+                ai.features?.map { feat ->
+                    AiFeatureCrossRef(aiId = ai.id, featureId = feat.id)
+                } ?: emptyList()
+            }
+
+            aiDao.insertFeatures(featureEntities)
+
             categoryDao.insertAll(categoryEntities)
 
-            aiDao.updateData(aiEntities, crossRefs)
+            aiDao.updateData(aiEntities, categoryRefs, featureRefs)
+
 
         } catch (e: Exception) {
             Log.e("HomeRepository", "Error en la sincronización: ${e.message}")

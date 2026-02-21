@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,9 +28,9 @@ import coil.compose.AsyncImage
 @Composable
 fun AiCard(
     name: String,
-    description: String,
+    category: String?,
     price: String,
-    logoUrl: String?,
+    logoUrl: String,
     onClick: () -> Unit
 ) {
     Card(
@@ -65,15 +66,18 @@ fun AiCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = name,
+                    style = MaterialTheme.typography.titleMedium,
                     color = Color.White,
-                    fontWeight = FontWeight.Bold
                 )
-                Text(
-                    text = description,
-                    color = Color.Gray,
-                    fontSize = 12.sp,
-                    maxLines = 1
-                )
+                Spacer(Modifier.padding(vertical = 4.dp))
+                if (category != null) {
+                    Text(
+                        text = category,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Gray,
+                        maxLines = 1
+                    )
+                }
             }
 
             Text(
