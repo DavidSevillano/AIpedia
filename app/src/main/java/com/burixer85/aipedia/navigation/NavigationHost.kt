@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import com.burixer85.aipedia.presentation.HomeScreen
+import com.burixer85.aipedia.home.presentation.HomeScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.burixer85.aipedia.presentation.AiScreen
+import com.burixer85.aipedia.Detail.presentation.DetailScreen
 
 @Composable
 fun NavigationHost(navHostController: NavHostController) {
@@ -33,7 +33,9 @@ fun NavigationHost(navHostController: NavHostController) {
             )
         ) { backStackEntry ->
             val aiId = backStackEntry.arguments?.getString("aiId")
-            AiScreen(aiId = aiId)
+            DetailScreen(aiId = aiId,
+                onBack = { navHostController.popBackStack() }
+                )
         }
     }
 }
