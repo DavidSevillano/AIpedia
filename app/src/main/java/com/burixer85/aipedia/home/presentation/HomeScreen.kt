@@ -76,8 +76,8 @@ fun HomeScreen(
                     AiCard(
                         name = ai.name,
                         category = firsCategory,
-                        price = ai.price_model,
-                        logoUrl = ai.logo_url,
+                        price = ai.priceModel,
+                        logo = ai.logo,
                         onClick = { onAiClick(ai.id) }
                     )
                 }

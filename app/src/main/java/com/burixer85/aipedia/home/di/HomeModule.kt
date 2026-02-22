@@ -23,7 +23,7 @@ object HomeModule {
 
     @Provides
     @Singleton
-    fun provideHomeUseCase(homeRepository: HomeRepository): GetAllAisUseCase {
+    fun provideGetAllAisUseCase(homeRepository: HomeRepository): GetAllAisUseCase {
         return GetAllAisUseCase(homeRepository)
     }
 }

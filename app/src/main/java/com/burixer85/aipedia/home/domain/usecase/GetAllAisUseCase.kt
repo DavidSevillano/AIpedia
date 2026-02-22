@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class GetAllAisUseCase @Inject constructor(private val homeRepository: HomeRepository) {
     operator fun invoke(): Flow<List<Ai>> {
-        return homeRepository.getAllAisWithCategories()
+        return homeRepository.getAllAis()
             .onStart {
                 homeRepository.loadAndCacheInitialData()
             }

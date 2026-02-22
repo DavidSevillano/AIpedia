@@ -36,7 +36,7 @@ fun AiWithCategories.toDomain(): Ai {
         description = this.ai.description,
         website = this.ai.website,
         priceModel = this.ai.priceModel,
-        logoUrl = this.ai.logoUrl,
+        logo = this.ai.logoUrl,
         categories = this.categories.map { it.toDomain() },
         features = this.features.map { it.toDomain() }
     )

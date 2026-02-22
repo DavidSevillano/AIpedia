@@ -8,7 +8,7 @@ import com.burixer85.aipedia.home.presentation.HomeScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.burixer85.aipedia.Detail.presentation.DetailScreen
+import com.burixer85.aipedia.detail.presentation.DetailScreen
 
 @Composable
 fun NavigationHost(navHostController: NavHostController) {

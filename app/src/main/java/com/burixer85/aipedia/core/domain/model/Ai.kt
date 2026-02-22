@@ -13,7 +13,7 @@ data class Ai(
     @SerialName("price_model")
     val priceModel: String,
     @SerialName("logo_url")
-    val logoUrl: String,
+    val logo: String,
     val categories: List<Category> = emptyList(),
     val features: List<Feature> = emptyList()
 )
@@ -25,6 +25,6 @@ fun Ai.toData(): AiEntity {
         description = this.description,
         website = this.website,
         priceModel = this.priceModel,
-        logoUrl = this.logoUrl,
+        logoUrl = this.logo,
     )
 }

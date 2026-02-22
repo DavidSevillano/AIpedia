@@ -22,7 +22,7 @@ class HomeRepositoryImp @Inject constructor(
     private val supabase: SupabaseClient
 ) : HomeRepository {
 
-    override fun getAllAisWithCategories(): Flow<List<Ai>> {
+    override fun getAllAis(): Flow<List<Ai>> {
         val result = aiDao.getAllAis()
             .map { listAiWithCategories ->
                 listAiWithCategories.map { it.toDomain() }
