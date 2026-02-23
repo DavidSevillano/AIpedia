@@ -3,6 +3,7 @@ package com.burixer85.aipedia.detail.presentation
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,10 +51,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import androidx.core.net.toUri
 import com.burixer85.aipedia.R
+import com.burixer85.aipedia.core.domain.model.Feature
+import com.burixer85.aipedia.core.presentation.component.FeatureDetailModal
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,6 +71,10 @@ fun DetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    val sheetState = rememberModalBottomSheetState()
+    var selectedFeature by remember { mutableStateOf<Feature?>(null) }
+    var showSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect(aiId) {
         aiId?.let { viewModel.loadAiDetails(it) }
@@ -201,7 +212,13 @@ fun DetailScreen(
                             ai.features.forEach { feature ->
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.padding(vertical = 8.dp)
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            selectedFeature = feature
+                                            showSheet = true
+                                        }
+                                        .padding(vertical = 12.dp, horizontal = 12.dp)
                                 ) {
                                     AsyncImage(
                                         model = feature.icon,
@@ -264,4 +281,10 @@ fun DetailScreen(
             }
         }
     }
+    FeatureDetailModal(
+        selectedFeature = selectedFeature,
+        showSheet = showSheet,
+        onDismissRequest = { showSheet = false },
+        sheetState = sheetState,
+    )
 }
