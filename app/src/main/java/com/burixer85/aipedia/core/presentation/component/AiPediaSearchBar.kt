@@ -44,13 +44,6 @@ fun AiPediaSearchBar(
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
-        trailingIcon = {
-            Icon(
-                imageVector = Icons.Default.Mic,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        },
         singleLine = true,
         colors = OutlinedTextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,

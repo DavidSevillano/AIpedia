@@ -55,6 +55,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import androidx.core.net.toUri
@@ -89,10 +90,11 @@ fun DetailScreen(
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground                        )
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(                    containerColor = MaterialTheme.colorScheme.background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
         bottomBar = {
@@ -141,21 +143,28 @@ fun DetailScreen(
                         .padding(horizontal = 24.dp)
                         .verticalScroll(rememberScrollState())
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         AsyncImage(
                             model = ai.logo,
                             contentDescription = null,
                             modifier = Modifier
                                 .size(80.dp)
                                 .clip(RoundedCornerShape(16.dp))
-                                .background(Color.White)
+                                .background(Color.White),
+                            contentScale = ContentScale.Crop
                         )
                         Spacer(Modifier.width(20.dp))
-                        Column {
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
                             Text(
                                 text = ai.name,
                                 style = MaterialTheme.typography.headlineLarge,
-                                color = MaterialTheme.colorScheme.onSurface                            )
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
                             Spacer(Modifier.height(8.dp))
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 ai.categories.forEach { category ->
@@ -166,7 +175,7 @@ fun DetailScreen(
                                         Text(
                                             text = category.name,
                                             style = MaterialTheme.typography.bodySmall,
-                                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8F),
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             modifier = Modifier.padding(
                                                 horizontal = 12.dp,
                                                 vertical = 4.dp
@@ -176,17 +185,14 @@ fun DetailScreen(
                                 }
                             }
                         }
+                        Text(
+                            text = ai.priceModel,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                     }
 
                     Spacer(Modifier.height(32.dp))
-
-                    Text(
-                        text = ai.priceModel,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Spacer(Modifier.height(16.dp))
 
                     Text(
                         text = ai.description,
