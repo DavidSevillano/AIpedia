@@ -18,15 +18,18 @@ data class AiWithCategories(
         )
     )
     val categories: List<CategoryEntity>,
-
     @Relation(
         parentColumn = "id",
         entityColumn = "id",
         associateBy = Junction(AiFeatureCrossRef::class, parentColumn = "aiId", entityColumn = "featureId")
     )
-    val features: List<FeatureEntity>
-
-
+    val features: List<FeatureEntity>,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "id",
+        associateBy = Junction(AiPlatformCrossRef::class, parentColumn = "aiId", entityColumn = "platformId")
+    )
+    val platforms: List<PlatformEntity>
 )
 
 fun AiWithCategories.toDomain(): Ai {
@@ -38,6 +41,7 @@ fun AiWithCategories.toDomain(): Ai {
         priceModel = this.ai.priceModel,
         logo = this.ai.logoUrl,
         categories = this.categories.map { it.toDomain() },
-        features = this.features.map { it.toDomain() }
+        features = this.features.map { it.toDomain() },
+        platforms = this.platforms.map { it.toDomain() }
     )
 }

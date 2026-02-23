@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,8 +49,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import androidx.core.net.toUri
+import com.burixer85.aipedia.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,7 +105,11 @@ fun DetailScreen(
                             shape = RoundedCornerShape(28.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4A90E2))
                         ) {
-                            Text("Visit Website", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                            Text(
+                                stringResource(R.string.DetailScreen_Text_Website),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = Color.White
+                            )
                         }
                     }
                 }
@@ -132,10 +141,9 @@ fun DetailScreen(
                         Spacer(Modifier.width(20.dp))
                         Column {
                             Text(
-                                ai.name,
-                                color = Color.White,
-                                fontSize = 26.sp,
-                                fontWeight = FontWeight.Bold
+                                text = ai.name,
+                                style = MaterialTheme.typography.headlineLarge,
+                                color = Color.White
                             )
                             Spacer(Modifier.height(8.dp))
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -146,12 +154,12 @@ fun DetailScreen(
                                     ) {
                                         Text(
                                             text = category.name,
+                                            style = MaterialTheme.typography.bodySmall,
                                             color = Color.Gray,
                                             modifier = Modifier.padding(
                                                 horizontal = 12.dp,
                                                 vertical = 4.dp
-                                            ),
-                                            fontSize = 12.sp
+                                            )
                                         )
                                     }
                                 }
@@ -162,29 +170,26 @@ fun DetailScreen(
                     Spacer(Modifier.height(32.dp))
 
                     Text(
-                        ai.priceModel,
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold
+                        text = ai.priceModel,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White
                     )
 
                     Spacer(Modifier.height(16.dp))
 
                     Text(
                         text = ai.description,
-                        color = Color.LightGray,
-                        lineHeight = 22.sp,
-                        fontSize = 15.sp
+                        style = MaterialTheme.typography.bodyMedium
                     )
 
                     Spacer(Modifier.height(32.dp))
 
                     Text(
-                        "Key Features",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
+                        text = stringResource(R.string.DetailScreen_Text_Title_Features),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White
                     )
+
                     Spacer(Modifier.height(12.dp))
                     Surface(
                         color = Color(0xFF1E293B),
@@ -203,7 +208,11 @@ fun DetailScreen(
                                         modifier = Modifier.size(20.dp),
                                     )
                                     Spacer(Modifier.width(12.dp))
-                                    Text(feature.name, color = Color.LightGray, fontSize = 14.sp)
+                                    Text(
+                                        text = feature.name,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Color.LightGray
+                                    )
                                 }
                             }
                         }
@@ -212,21 +221,35 @@ fun DetailScreen(
                     Spacer(Modifier.height(32.dp))
 
                     Text(
-                        "Supported Languages",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
+                        text = stringResource(R.string.DetailScreen_Text_Title_Platforms),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White
                     )
                     Spacer(Modifier.height(12.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        repeat(4) {
-                            Box(
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .clip(CircleShape)
-                                    .background(Color.DarkGray)
-                            )
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        items(ai.platforms) { platform ->
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                AsyncImage(
+                                    model = platform.icon,
+                                    contentDescription = platform.name,
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .clip(CircleShape)
+                                        .background(Color(0xFF1E293B))
+                                        .padding(8.dp),
+                                )
+                                Spacer(Modifier.height(4.dp))
+                                Text(
+                                    text = platform.name,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Color.Gray
+                                )
+                            }
                         }
+
                     }
 
                     Spacer(Modifier.height(40.dp))

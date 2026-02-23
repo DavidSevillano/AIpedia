@@ -15,7 +15,8 @@ data class Ai(
     @SerialName("logo_url")
     val logo: String,
     val categories: List<Category> = emptyList(),
-    val features: List<Feature> = emptyList()
+    val features: List<Feature> = emptyList(),
+    val platforms: List<Platform> = emptyList()
 )
 
 fun Ai.toData(): AiEntity {

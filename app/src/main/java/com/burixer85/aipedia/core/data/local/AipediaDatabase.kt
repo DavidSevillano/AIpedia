@@ -7,12 +7,16 @@ import com.burixer85.aipedia.core.data.local.dao.CategoryDao
 import com.burixer85.aipedia.core.data.local.entity.AiCategoryCrossRef
 import com.burixer85.aipedia.core.data.local.entity.AiEntity
 import com.burixer85.aipedia.core.data.local.entity.AiFeatureCrossRef
+import com.burixer85.aipedia.core.data.local.entity.AiPlatformCrossRef
 import com.burixer85.aipedia.core.data.local.entity.CategoryEntity
 import com.burixer85.aipedia.core.data.local.entity.FeatureEntity
+import com.burixer85.aipedia.core.data.local.entity.PlatformEntity
 
 @Database(
-    entities = [AiEntity::class, CategoryEntity::class, AiCategoryCrossRef::class, FeatureEntity::class, AiFeatureCrossRef::class],
-    version = 5,
+    entities = [AiEntity::class, CategoryEntity::class, AiCategoryCrossRef::class,
+        FeatureEntity::class, AiFeatureCrossRef::class, PlatformEntity::class,
+        AiPlatformCrossRef::class],
+    version = 6,
     exportSchema = false
 )
 abstract class AipediaDatabase : RoomDatabase() {

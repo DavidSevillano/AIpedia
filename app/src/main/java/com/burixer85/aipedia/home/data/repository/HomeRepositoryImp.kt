@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import io.github.jan.supabase.postgrest.query.Columns
 import com.burixer85.aipedia.core.data.local.entity.AiFeatureCrossRef
+import com.burixer85.aipedia.core.data.local.entity.AiPlatformCrossRef
 
 class HomeRepositoryImp @Inject constructor(
     private val aiDao: AiDao,
@@ -32,7 +33,7 @@ class HomeRepositoryImp @Inject constructor(
     override suspend fun loadAndCacheInitialData() {
         try {
             val supabaseAis = supabase.from("ai")
-                .select(columns = Columns.raw("*, categories(*), features(*)"))
+                .select(columns = Columns.raw("*, categories(*), features(*), platforms(*)"))
                 .decodeList<Ai>()
 
             if (supabaseAis.isEmpty()) return
@@ -59,11 +60,23 @@ class HomeRepositoryImp @Inject constructor(
                 } ?: emptyList()
             }
 
+            val platformEntities = supabaseAis.flatMap { ai ->
+                ai.platforms.map { it.toData() }
+            }.distinctBy { it.id }
+
+            val platformRefs = supabaseAis.flatMap { ai ->
+                ai.platforms.map { plat ->
+                    AiPlatformCrossRef(aiId = ai.id, platformId = plat.id)
+                }
+            }
+
             aiDao.insertFeatures(featureEntities)
+
+            aiDao.insertPlatforms(platformEntities)
 
             categoryDao.insertAll(categoryEntities)
 
-            aiDao.updateData(aiEntities, categoryRefs, featureRefs)
+            aiDao.updateData(aiEntities, categoryRefs, featureRefs, platformRefs)
 
 
         } catch (e: Exception) {

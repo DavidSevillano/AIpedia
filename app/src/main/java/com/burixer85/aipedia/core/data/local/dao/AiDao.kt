@@ -8,8 +8,10 @@ import androidx.room.Transaction
 import com.burixer85.aipedia.core.data.local.entity.AiCategoryCrossRef
 import com.burixer85.aipedia.core.data.local.entity.AiEntity
 import com.burixer85.aipedia.core.data.local.entity.AiFeatureCrossRef
+import com.burixer85.aipedia.core.data.local.entity.AiPlatformCrossRef
 import com.burixer85.aipedia.core.data.local.entity.AiWithCategories
 import com.burixer85.aipedia.core.data.local.entity.FeatureEntity
+import com.burixer85.aipedia.core.data.local.entity.PlatformEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -38,6 +40,9 @@ interface AiDao {
     suspend fun insertFeatures(features: List<FeatureEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPlatforms(platforms: List<PlatformEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAiFeatureCrossRefs(crossRefs: List<AiFeatureCrossRef>)
 
     @Query("DELETE FROM features")
@@ -46,18 +51,28 @@ interface AiDao {
     @Query("DELETE FROM aifeaturecrossref")
     suspend fun deleteAllAiFeatureCrossRefs()
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAiPlatformCrossRefs(crossRefs: List<AiPlatformCrossRef>)
+
+    @Query("DELETE FROM aiplatformcrossref")
+    suspend fun deleteAllAiPlatformCrossRefs()
+
+
     @Transaction
     suspend fun updateData(
         ais: List<AiEntity>,
         categoryRefs: List<AiCategoryCrossRef>,
-        featureRefs: List<AiFeatureCrossRef>
+        featureRefs: List<AiFeatureCrossRef>,
+        platformRefs: List<AiPlatformCrossRef>
     ) {
         deleteAllAiCategoryCrossRefs()
         deleteAllAiFeatureCrossRefs()
+        deleteAllAiPlatformCrossRefs()
         deleteAllAis()
         insertAis(ais)
         insertAiCategoryCrossRefs(categoryRefs)
         insertAiFeatureCrossRefs(featureRefs)
+        insertAiPlatformCrossRefs(platformRefs)
     }
 }
 
