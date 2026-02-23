@@ -78,11 +78,10 @@ fun DetailScreen(
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null,
-                            tint = Color.White
-                        )
+                            tint = MaterialTheme.colorScheme.onBackground                        )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF0F172A))
+                colors = TopAppBarDefaults.topAppBarColors(                    containerColor = MaterialTheme.colorScheme.background)
             )
         },
         bottomBar = {
@@ -91,7 +90,7 @@ fun DetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .navigationBarsPadding(),
-                    color = Color(0xFF0F172A)
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
                         Button(
@@ -103,19 +102,21 @@ fun DetailScreen(
                                 .fillMaxWidth()
                                 .height(56.dp),
                             shape = RoundedCornerShape(28.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4A90E2))
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary
+                            )
                         ) {
                             Text(
                                 stringResource(R.string.DetailScreen_Text_Website),
                                 style = MaterialTheme.typography.labelMedium,
-                                color = Color.White
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
                 }
             }
         },
-        containerColor = Color(0xFF0F172A)
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Box(
             modifier = Modifier
@@ -143,19 +144,18 @@ fun DetailScreen(
                             Text(
                                 text = ai.name,
                                 style = MaterialTheme.typography.headlineLarge,
-                                color = Color.White
-                            )
+                                color = MaterialTheme.colorScheme.onSurface                            )
                             Spacer(Modifier.height(8.dp))
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 ai.categories.forEach { category ->
                                     Surface(
-                                        color = Color(0xFF1E293B),
+                                        color = MaterialTheme.colorScheme.surfaceVariant,
                                         shape = RoundedCornerShape(12.dp)
                                     ) {
                                         Text(
                                             text = category.name,
                                             style = MaterialTheme.typography.bodySmall,
-                                            color = Color.Gray,
+                                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8F),
                                             modifier = Modifier.padding(
                                                 horizontal = 12.dp,
                                                 vertical = 4.dp
@@ -172,14 +172,15 @@ fun DetailScreen(
                     Text(
                         text = ai.priceModel,
                         style = MaterialTheme.typography.titleMedium,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Spacer(Modifier.height(16.dp))
 
                     Text(
                         text = ai.description,
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                     )
 
                     Spacer(Modifier.height(32.dp))
@@ -187,12 +188,12 @@ fun DetailScreen(
                     Text(
                         text = stringResource(R.string.DetailScreen_Text_Title_Features),
                         style = MaterialTheme.typography.titleMedium,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Spacer(Modifier.height(12.dp))
                     Surface(
-                        color = Color(0xFF1E293B),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -211,7 +212,7 @@ fun DetailScreen(
                                     Text(
                                         text = feature.name,
                                         style = MaterialTheme.typography.bodyMedium,
-                                        color = Color.LightGray
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                                     )
                                 }
                             }
@@ -223,7 +224,7 @@ fun DetailScreen(
                     Text(
                         text = stringResource(R.string.DetailScreen_Text_Title_Platforms),
                         style = MaterialTheme.typography.titleMedium,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(Modifier.height(12.dp))
                     LazyRow(
@@ -238,14 +239,14 @@ fun DetailScreen(
                                     modifier = Modifier
                                         .size(36.dp)
                                         .clip(CircleShape)
-                                        .background(Color(0xFF1E293B))
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
                                         .padding(8.dp),
                                 )
                                 Spacer(Modifier.height(4.dp))
                                 Text(
                                     text = platform.name,
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = Color.Gray
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                                 )
                             }
                         }
@@ -258,7 +259,7 @@ fun DetailScreen(
             if (uiState.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
-                    color = Color(0xFF4A90E2)
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }

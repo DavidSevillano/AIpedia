@@ -8,4 +8,7 @@
     <string name="DetailScreen_Text_Website">Visitar web</string>
     <string name="DetailScreen_Text_Title_Features">Características clave</string>
     <string name="DetailScreen_Text_Title_Platforms">Plataformas disponibles</string>
+
+    <!-- AiPediaSearchBar -->
+    <string name="AiPediaSearchBar_Text_Placeholder">Búsqueda</string>
 </resources>

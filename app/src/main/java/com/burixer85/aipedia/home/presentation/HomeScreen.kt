@@ -25,7 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.burixer85.aipedia.R
-import com.burixer85.aipedia.core.presentation.component.AiCard
+import com.burixer85.aipedia.core.presentation.component.AiPediaCard
+import com.burixer85.aipedia.core.presentation.component.AiPediaSearchBar
+
 
 @Composable
 fun HomeScreen(
@@ -37,14 +39,7 @@ fun HomeScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.radialGradient(
-                    colors = listOf(
-                        Color(0xFF0F172A),
-                        Color(0xFF090E1A)
-                    )
-                )
-            )
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
@@ -57,7 +52,14 @@ fun HomeScreen(
             Text(
                 text = stringResource(R.string.HomeScreen_Text_Title_App),
                 style = MaterialTheme.typography.headlineLarge,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            AiPediaSearchBar(
+                value = uiState.searchText,
+                onValueChange = homeViewmodel::onSearchTextChange,
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -73,7 +75,7 @@ fun HomeScreen(
 
                     val firsCategory = ai.categories?.firstOrNull()?.name
 
-                    AiCard(
+                    AiPediaCard(
                         name = ai.name,
                         category = firsCategory,
                         price = ai.priceModel,
@@ -86,7 +88,7 @@ fun HomeScreen(
         if (uiState.isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center),
-                color = Color(0xFF4A90E2)
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }
