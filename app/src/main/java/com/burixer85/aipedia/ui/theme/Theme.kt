@@ -15,7 +15,8 @@ import androidx.compose.ui.platform.LocalContext
 private val DarkColorScheme = darkColorScheme(
     primary = BlueAccent,
     background = DeepBackground,
-    surfaceVariant = BlueCardBackground, // <--- AQUÍ USAS LA VARIABLE DE COLOR.KT
+    onBackground = WhiteText,
+    surfaceVariant = BlueCardBackground,
     onSurfaceVariant = GrayText,
     onSurface = WhiteText
 )
@@ -23,7 +24,8 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = BlueAccent,
     background = DeepBackground,
-    surfaceVariant = BlueCardBackground, // <--- AQUÍ USAS LA VARIABLE DE COLOR.KT
+    onBackground = WhiteText,
+    surfaceVariant = BlueCardBackground,
     onSurfaceVariant = GrayText,
     onSurface = WhiteText
 

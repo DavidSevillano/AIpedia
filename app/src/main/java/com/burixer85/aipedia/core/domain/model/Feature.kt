@@ -7,8 +7,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Feature(
     val id: String,
-    val name: String,
-    val description: String,
+    @SerialName("name_es")
+    val nameEs: String,
+    @SerialName("name_en")
+    val nameEn: String,
+    @SerialName("description_es")
+    val descriptionEs: String,
+    @SerialName("description_en")
+    val descriptionEn: String,
     @SerialName("icon_url")
     val icon: String
 )
@@ -16,8 +22,10 @@ data class Feature(
 fun Feature.toData(): FeatureEntity {
     return FeatureEntity(
         id = this.id,
-        name = this.name,
-        description = this.description,
+        nameEs = this.nameEs,
+        nameEn = this.nameEn,
+        descriptionEs = this.descriptionEs,
+        descriptionEn = this.descriptionEn,
         iconUrl = this.icon
     )
 }

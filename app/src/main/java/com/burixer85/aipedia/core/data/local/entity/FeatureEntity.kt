@@ -8,8 +8,14 @@ import com.burixer85.aipedia.core.domain.model.Feature
 @Entity(tableName = "features")
 data class FeatureEntity(
     @PrimaryKey val id: String,
-    val name: String,
-    val description: String,
+    @ColumnInfo(name = "name_es")
+    val nameEs: String,
+    @ColumnInfo(name = "name_en")
+    val nameEn: String,
+    @ColumnInfo(name = "description_es")
+    val descriptionEs: String,
+    @ColumnInfo(name = "description_en")
+    val descriptionEn: String,
     @ColumnInfo(name = "icon_url")
     val iconUrl: String
 )
@@ -17,8 +23,10 @@ data class FeatureEntity(
 fun FeatureEntity.toDomain(): Feature{
     return Feature(
         id = this.id,
-        name = this.name,
-        description = this.description,
+        nameEs = this.nameEs,
+        nameEn = this.nameEn,
+        descriptionEs = this.descriptionEs,
+        descriptionEn = this.descriptionEn,
         icon = this.iconUrl
     )
 }

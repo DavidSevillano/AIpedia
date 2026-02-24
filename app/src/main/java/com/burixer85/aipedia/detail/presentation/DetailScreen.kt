@@ -57,10 +57,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
 import androidx.core.net.toUri
 import com.burixer85.aipedia.R
 import com.burixer85.aipedia.core.domain.model.Feature
+import com.burixer85.aipedia.core.domain.util.localizedDescription
+import com.burixer85.aipedia.core.domain.util.localizedName
+import com.burixer85.aipedia.core.presentation.component.AiPediaCategoryExpanded
 import com.burixer85.aipedia.core.presentation.component.FeatureDetailModal
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -151,7 +155,7 @@ fun DetailScreen(
                             model = ai.logo,
                             contentDescription = null,
                             modifier = Modifier
-                                .size(80.dp)
+                                .size(60.dp)
                                 .clip(RoundedCornerShape(16.dp))
                                 .background(Color.White),
                             contentScale = ContentScale.Crop
@@ -162,29 +166,17 @@ fun DetailScreen(
                         ) {
                             Text(
                                 text = ai.name,
-                                style = MaterialTheme.typography.headlineLarge,
-                                color = MaterialTheme.colorScheme.onBackground
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1
+
                             )
                             Spacer(Modifier.height(8.dp))
-                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                ai.categories.forEach { category ->
-                                    Surface(
-                                        color = MaterialTheme.colorScheme.surfaceVariant,
-                                        shape = RoundedCornerShape(12.dp)
-                                    ) {
-                                        Text(
-                                            text = category.name,
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            modifier = Modifier.padding(
-                                                horizontal = 12.dp,
-                                                vertical = 4.dp
-                                            )
-                                        )
-                                    }
-                                }
-                            }
+                            AiPediaCategoryExpanded(categories = ai.categories)
                         }
+                        Spacer(Modifier.width(8.dp))
                         Text(
                             text = ai.priceModel,
                             style = MaterialTheme.typography.titleMedium,
@@ -195,7 +187,7 @@ fun DetailScreen(
                     Spacer(Modifier.height(32.dp))
 
                     Text(
-                        text = ai.description,
+                        text = ai.localizedDescription(),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                     )
@@ -233,7 +225,7 @@ fun DetailScreen(
                                     )
                                     Spacer(Modifier.width(12.dp))
                                     Text(
-                                        text = feature.name,
+                                        text = feature.localizedName(),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                                     )

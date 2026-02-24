@@ -9,7 +9,10 @@ data class AiEntity(
     @PrimaryKey(autoGenerate = false)
     val id: String,
     val name: String,
-    val description: String,
+    @ColumnInfo(name = "description_es")
+    val descriptionEs: String,
+    @ColumnInfo(name = "description_en")
+    val descriptionEn: String,
     val website: String,
     @ColumnInfo(name = "price_model")
     val priceModel: String,

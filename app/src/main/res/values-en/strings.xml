@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">AIpedia</string>
+
+    <!-- HomeScreen -->
+    <string name="HomeScreen_Text_Title_App">AIpedia</string>
+
+    <!-- DetailScreen -->
+    <string name="DetailScreen_Text_Website">Visit Website</string>
+    <string name="DetailScreen_Text_Title_Features">Key Features</string>
+    <string name="DetailScreen_Text_Title_Platforms">Platforms</string>
+
+    <!-- AiPediaSearchBar -->
+    <string name="AiPediaSearchBar_Text_Placeholder">Search</string>
+</resources>

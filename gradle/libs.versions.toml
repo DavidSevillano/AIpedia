@@ -20,6 +20,7 @@ ksp = "2.0.21-1.0.25"
 hiltNavigationCompose = "1.2.0"
 room = "2.6.1"
 material3 = "1.4.0"
+ui = "1.10.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,6 +60,7 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,21 +1,24 @@
 package com.burixer85.aipedia.core.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.burixer85.aipedia.core.domain.model.Category
 
 @Entity(tableName = "categories")
 data class CategoryEntity(
-    @PrimaryKey (autoGenerate = false)
+    @PrimaryKey(autoGenerate = false)
     val id: String,
-    val name: String,
-    val icon: String
+    @ColumnInfo("name_es")
+    val nameEs: String,
+    @ColumnInfo("name_en")
+    val nameEn: String,
 )
 
 fun CategoryEntity.toDomain(): Category {
     return Category(
         id = this.id,
-        name = this.name,
-        icon = this.icon
+        nameEs = this.nameEs,
+        nameEn = this.nameEn
     )
 }

@@ -1,20 +1,23 @@
 package com.burixer85.aipedia.core.domain.model
 
 import com.burixer85.aipedia.core.data.local.entity.CategoryEntity
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Category(
     val id: String,
-    val name: String,
-    val icon: String
+    @SerialName("name_es")
+    val nameEs: String,
+    @SerialName("name_en")
+    val nameEn: String
 )
 
 fun Category.toData(): CategoryEntity {
     return CategoryEntity(
         id = this.id,
-        name = this.name,
-        icon = this.icon
+        nameEs = this.nameEs,
+        nameEn = this.nameEn
     )
 }
 

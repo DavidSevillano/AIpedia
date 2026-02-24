@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.burixer85.aipedia.core.domain.model.Feature
+import com.burixer85.aipedia.core.domain.util.localizedDescription
+import com.burixer85.aipedia.core.domain.util.localizedName
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,12 +38,12 @@ fun FeatureDetailModal(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     AsyncImage(
                         model = selectedFeature.icon,
-                        contentDescription = selectedFeature.name,
+                        contentDescription = selectedFeature.localizedName(),
                         modifier = Modifier.size(32.dp)
                     )
                     Spacer(Modifier.width(16.dp))
                     Text(
-                        text = selectedFeature.name,
+                        text = selectedFeature.localizedName(),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -50,7 +52,7 @@ fun FeatureDetailModal(
                 Spacer(Modifier.height(20.dp))
 
                 Text(
-                    text = selectedFeature.description,
+                    text = selectedFeature.localizedDescription(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                     lineHeight = 24.sp

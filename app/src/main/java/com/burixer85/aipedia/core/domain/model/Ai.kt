@@ -8,7 +8,10 @@ import kotlinx.serialization.Serializable
 data class Ai(
     val id: String,
     val name: String,
-    val description: String,
+    @SerialName("description_es")
+    val descriptionEs: String,
+    @SerialName("description_en")
+    val descriptionEn: String,
     val website: String,
     @SerialName("price_model")
     val priceModel: String,
@@ -23,7 +26,8 @@ fun Ai.toData(): AiEntity {
     return AiEntity(
         id = this.id,
         name = this.name,
-        description = this.description,
+        descriptionEs = this.descriptionEs,
+        descriptionEn = this.descriptionEn,
         website = this.website,
         priceModel = this.priceModel,
         logoUrl = this.logo,
