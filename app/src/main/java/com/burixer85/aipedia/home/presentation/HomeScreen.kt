@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,8 +27,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.burixer85.aipedia.R
 import com.burixer85.aipedia.core.domain.util.localizedName
 import com.burixer85.aipedia.core.presentation.component.AiPediaCard
+import com.burixer85.aipedia.core.presentation.component.AiPediaCardPlaceholder
 import com.burixer85.aipedia.core.presentation.component.AiPediaSearchBar
-
+import com.burixer85.aipedia.core.presentation.component.NativeAdItem
 
 @Composable
 fun HomeScreen(
@@ -70,25 +73,32 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(bottom = 40.dp)
             ) {
-                items(items = uiState.aiList, key = {it.id}) { ai ->
+                if (uiState.isLoading) {
+                    items(5) {
+                        AiPediaCardPlaceholder()
+                    }
+                } else {
+                    itemsIndexed(items = uiState.aiList, key = { _, ai -> ai.id }) { index, ai ->
+                        val firsCategory = ai.categories?.firstOrNull()?.localizedName()
 
-                    val firsCategory = ai.categories?.firstOrNull()?.localizedName()
+                        AiPediaCard(
+                            name = ai.name,
+                            category = firsCategory,
+                            price = ai.priceModel,
+                            logo = ai.logo,
+                            onClick = { onAiClick(ai.id) }
+                        )
 
-                    AiPediaCard(
-                        name = ai.name,
-                        category = firsCategory,
-                        price = ai.priceModel,
-                        logo = ai.logo,
-                        onClick = { onAiClick(ai.id) }
-                    )
+                        if (index == 1) {
+                            NativeAdItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp)
+                            )
+                        }
+                    }
                 }
             }
-        }
-        if (uiState.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-                color = MaterialTheme.colorScheme.primary
-            )
         }
     }
 }

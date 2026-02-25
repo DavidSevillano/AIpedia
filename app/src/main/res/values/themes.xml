@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.AIpedia" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.AIpedia" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorSurfaceVariant">@color/blue_card_background</item>
+        <item name="colorOnSurfaceVariant">@color/gray_text</item>
+        <item name="colorOnSurface">@color/white_text</item>
+        <item name="colorPrimary">@color/blue_accent</item>
+    </style>
 </resources>

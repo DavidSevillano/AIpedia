@@ -28,19 +28,31 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         buildConfigField("String", "SUPABASE_URL", "\"${localProperties.getProperty("supabase.url")}\"")
         buildConfigField("String", "SUPABASE_KEY", "\"${localProperties.getProperty("supabase.key")}\"")
+
+        buildConfigField("String", "TEST_DEVICE_ID", "\"${localProperties.getProperty("admob.test.device.id")}\"")
+        buildConfigField("String", "NATIVE_AD_ID", "\"ca-app-pub-3940256099942544/2247696110\"")
+
+        manifestPlaceholders["admobAppId"] = "${localProperties.getProperty("admob.app.id")}"
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+
+            buildConfigField("String", "NATIVE_AD_ID", "\"${localProperties.getProperty("admob.native.id")}\"")
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
+        getByName("debug") {
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -68,6 +80,8 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.compose.foundation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -77,7 +91,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
-
+    implementation(libs.play.services.ads)
 
     // ViewModel & Lifecycle
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -114,5 +128,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    // xml
+    implementation("com.google.android.material:material:1.12.0")
 
 }
