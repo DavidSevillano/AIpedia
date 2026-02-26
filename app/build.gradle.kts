@@ -128,6 +128,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    // Splash Screen
+    implementation(libs.androidx.core.splashscreen)
+
     // xml
     implementation("com.google.android.material:material:1.12.0")
 
