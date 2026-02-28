@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -44,13 +45,13 @@ fun AiPediaCategoryExpanded(
         categories.firstOrNull()?.let { category ->
             Surface(
                 color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.wrapContentHeight()
             ) {
                 Text(
                     text = category.localizedName(),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
                 )
             }
         }
@@ -96,7 +97,7 @@ fun AiPediaCategoryExpanded(
                                     verticalArrangement = Arrangement.spacedBy(8.dp),
                                     modifier = Modifier.width(IntrinsicSize.Max)
                                 ) {
-                                    categories.forEach { category ->
+                                    categories.drop(1).forEach { category ->
                                         Surface(
                                             color = MaterialTheme.colorScheme.background,
                                             shape = RoundedCornerShape(12.dp),
