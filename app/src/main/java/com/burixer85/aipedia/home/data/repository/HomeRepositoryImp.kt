@@ -16,6 +16,7 @@ import javax.inject.Inject
 import io.github.jan.supabase.postgrest.query.Columns
 import com.burixer85.aipedia.core.data.local.entity.AiFeatureCrossRef
 import com.burixer85.aipedia.core.data.local.entity.AiPlatformCrossRef
+import com.burixer85.aipedia.core.domain.model.Category
 
 class HomeRepositoryImp @Inject constructor(
     private val aiDao: AiDao,
@@ -30,6 +31,14 @@ class HomeRepositoryImp @Inject constructor(
             }
         return result
     }
+
+    override fun getAllCategories(): Flow<List<Category>> {
+        return categoryDao.getAllCategories()
+            .map { entities ->
+                entities.map { it.toDomain() }
+            }
+    }
+
     override suspend fun loadAndCacheInitialData() {
         try {
             val supabaseAis = supabase.from("ai")

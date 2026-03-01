@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.burixer85.aipedia.core.domain.model.Ai
 import com.burixer85.aipedia.core.domain.model.Category
 import com.burixer85.aipedia.home.domain.usecase.GetAllAisUseCase
+import com.burixer85.aipedia.home.domain.usecase.GetAllCategoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +27,8 @@ import javax.inject.Inject
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getAllAisUseCase: GetAllAisUseCase
+    private val getAllAisUseCase: GetAllAisUseCase,
+    private val getAllCategoriesUseCase: GetAllCategoriesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeScreenUI(isLoading = true))
@@ -35,40 +37,45 @@ class HomeViewModel @Inject constructor(
     private val _originalAiList = MutableStateFlow<List<Ai>>(emptyList())
 
     init {
-        loadData()
+        loadAis()
+        loadCategories()
         setupFilteringLogic()
     }
 
-    private fun loadData() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
+    private fun loadAis() {
+        _uiState.update { it.copy(isLoading = true) }
 
-            getAllAisUseCase()
-                .onEach { ais ->
-                    _originalAiList.value = ais
-                }
-                .collect { ais ->
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            aiList = ais,
-                            isLoading = false,
-                        )
-                    }
-                }
-        }
+        getAllAisUseCase()
+            .onEach { ais ->
+                _originalAiList.value = ais
+                _uiState.update { it.copy(aiList = ais, isLoading = false) }
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun loadCategories() {
+        getAllCategoriesUseCase()
+            .onEach { categories ->
+                _uiState.update { it.copy(categories = categories) }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun setupFilteringLogic() {
         combine(
             _originalAiList,
-            _uiState.map { it.searchText }.debounce(300L)
-        ) { originalList, searchText ->
-            if (searchText.isBlank()) {
-                originalList
-            } else {
-                originalList.filter { ai ->
-                    ai.name.contains(searchText, ignoreCase = true)
-                }
+            _uiState.map { it.searchText }.debounce(300L),
+            _uiState.map { it.selectedCategory }
+        ) { originalList, searchText, selectedCategory ->
+
+            originalList.filter { ai ->
+                val matchesSearch = searchText.isBlank() ||
+                        ai.name.contains(searchText, ignoreCase = true)
+
+                val matchesCategory =
+                    selectedCategory == null || ai.categories.any { it.id == selectedCategory.id }
+
+                matchesSearch && matchesCategory
             }
         }
             .onEach { filteredList ->
@@ -80,11 +87,16 @@ class HomeViewModel @Inject constructor(
     fun onSearchTextChange(newText: String) {
         _uiState.update { it.copy(searchText = newText) }
     }
+
+    fun onCategorySelected(category: Category?) {
+        _uiState.update { it.copy(selectedCategory = category) }
+    }
 }
 
 data class HomeScreenUI(
     val aiList: List<Ai> = emptyList(),
     val categories: List<Category> = emptyList(),
+    val selectedCategory: Category? = null,
     val searchText: String = "",
     val isLoading: Boolean = false
 )

@@ -11,4 +11,8 @@
 
     <!-- AiPediaSearchBar -->
     <string name="AiPediaSearchBar_Text_Placeholder">Búsqueda</string>
+
+    <!-- AiPediaCategoryFilter -->
+    <string name="AiPediaCategoryFilter_Text_All">Todas</string>
+
 </resources>

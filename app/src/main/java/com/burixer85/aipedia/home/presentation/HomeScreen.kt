@@ -28,6 +28,7 @@ import com.burixer85.aipedia.R
 import com.burixer85.aipedia.core.domain.util.localizedName
 import com.burixer85.aipedia.core.presentation.component.AiPediaCard
 import com.burixer85.aipedia.core.presentation.component.AiPediaCardPlaceholder
+import com.burixer85.aipedia.core.presentation.component.AiPediaCategoryFilter
 import com.burixer85.aipedia.core.presentation.component.AiPediaSearchBar
 import com.burixer85.aipedia.core.presentation.component.NativeAdItem
 
@@ -64,7 +65,13 @@ fun HomeScreen(
                 onValueChange = homeViewmodel::onSearchTextChange,
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            AiPediaCategoryFilter(
+                categories = uiState.categories,
+                selectedCategory = uiState.selectedCategory,
+                onCategorySelected = homeViewmodel::onCategorySelected
+            )
 
             LazyColumn(
                 modifier = Modifier
