@@ -1,5 +1,6 @@
 package com.burixer85.aipedia.home.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.burixer85.aipedia.core.domain.model.Ai
@@ -131,11 +132,13 @@ class HomeViewModel @Inject constructor(
 
     fun onCategorySelected(category: Category?) {
         if (_selectedCategory.value == category) return
-
         _selectedCategory.value = category
 
-        val count = calculateAdCount(_originalAiList.value.size)
+        val filteredSize = _originalAiList.value.filter { ai ->
+            category == null || ai.categories.any { it.id == category.id }
+        }.size
 
+        val count = calculateAdCount(filteredSize)
         adRepository.refreshAds(count)
     }
 }
