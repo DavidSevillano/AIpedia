@@ -1,4 +1,4 @@
-package com.burixer85.aipedia.core.domain.util
+package com.burixer85.aipedia.core.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration

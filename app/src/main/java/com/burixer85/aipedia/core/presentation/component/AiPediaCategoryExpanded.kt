@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.burixer85.aipedia.core.domain.model.Category
-import com.burixer85.aipedia.core.domain.util.localizedName
+import com.burixer85.aipedia.core.util.localizedName
 
 @Composable
 fun AiPediaCategoryExpanded(

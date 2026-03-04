@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.burixer85.aipedia.R
 import com.burixer85.aipedia.core.domain.model.Category
-import com.burixer85.aipedia.core.domain.util.localizedName
+import com.burixer85.aipedia.core.util.localizedName
 
 @Composable
 fun AiPediaCategoryFilter(

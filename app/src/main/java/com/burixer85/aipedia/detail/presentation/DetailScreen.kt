@@ -1,7 +1,6 @@
 package com.burixer85.aipedia.detail.presentation
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,16 +39,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.mutableStateOf
@@ -63,8 +59,8 @@ import coil.compose.AsyncImage
 import androidx.core.net.toUri
 import com.burixer85.aipedia.R
 import com.burixer85.aipedia.core.domain.model.Feature
-import com.burixer85.aipedia.core.domain.util.localizedDescription
-import com.burixer85.aipedia.core.domain.util.localizedName
+import com.burixer85.aipedia.core.util.localizedDescription
+import com.burixer85.aipedia.core.util.localizedName
 import com.burixer85.aipedia.core.presentation.component.AiPediaCategoryExpanded
 import com.burixer85.aipedia.core.presentation.component.FeatureDetailModal
 

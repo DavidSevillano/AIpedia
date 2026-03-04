@@ -11,8 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.burixer85.aipedia.core.domain.model.Feature
-import com.burixer85.aipedia.core.domain.util.localizedDescription
-import com.burixer85.aipedia.core.domain.util.localizedName
+import com.burixer85.aipedia.core.util.localizedDescription
+import com.burixer85.aipedia.core.util.localizedName
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
