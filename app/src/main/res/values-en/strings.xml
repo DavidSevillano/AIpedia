@@ -3,6 +3,10 @@
 
     <!-- HomeScreen -->
     <string name="HomeScreen_Text_Title_App">AIpedia</string>
+    <string name="HomeScreen_Text_Title_NoResults">No results found</string>
+    <string name="HomeScreen_Text_Subtitle_NoResults">We couldn\'t find any AI matching your current filters.</string>
+    <string name="HomeScreen_Text_Title_Error">Something went wrong!</string>
+    <string name="HomeScreen_Button_Retry">Retry</string>
 
     <!-- DetailScreen -->
     <string name="DetailScreen_Text_Website">Visit Website</string>

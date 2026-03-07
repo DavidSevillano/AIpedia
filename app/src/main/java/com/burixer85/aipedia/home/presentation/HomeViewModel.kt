@@ -56,6 +56,15 @@ class HomeViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
 
         getAllAisUseCase()
+            .catch { e ->
+                Log.e("HomeViewModel", "Error cargando AIs", e)
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "No se pudieron cargar los datos. Inténtalo de nuevo."
+                    )
+                }
+            }
             .onEach { ais ->
                 _originalAiList.value = ais
                 _uiState.update { it.copy(aiList = ais, isLoading = false) }
@@ -141,6 +150,10 @@ class HomeViewModel @Inject constructor(
         val count = calculateAdCount(filteredSize)
         adRepository.refreshAds(count)
     }
+
+    fun onRetry() {
+        loadAis()
+    }
 }
 
 data class HomeScreenUI(
@@ -149,6 +162,7 @@ data class HomeScreenUI(
     val selectedCategory: Category? = null,
     val searchText: String = "",
     val adPool: List<NativeAd> = emptyList(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null
 )
 

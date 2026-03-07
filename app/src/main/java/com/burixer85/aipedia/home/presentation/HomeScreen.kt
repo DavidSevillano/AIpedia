@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,10 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.burixer85.aipedia.R
+import com.burixer85.aipedia.core.presentation.component.AIpediaEmptyState
+import com.burixer85.aipedia.core.presentation.component.AIpediaErrorState
 import com.burixer85.aipedia.core.util.localizedName
 import com.burixer85.aipedia.core.presentation.component.AiPediaCard
 import com.burixer85.aipedia.core.presentation.component.AiPediaCardPlaceholder
@@ -85,37 +89,53 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(bottom = 40.dp)
             ) {
-                if (uiState.isLoading) {
-                    items(5) {
-                        AiPediaCardPlaceholder()
+                when {
+                    uiState.isLoading -> {
+                        items(5) { AiPediaCardPlaceholder() }
                     }
-                } else {
-                    val firstAdIndex = AdConfig.FIRST_AD_INDEX
-                    val frequency = AdConfig.FREQUENCY
 
-                    itemsIndexed(items = uiState.aiList, key = { _, ai -> ai.id }) { index, ai ->
-
-                        val firsCategory = ai.categories?.firstOrNull()?.localizedName()
-
-                        AiPediaCard(
-                            name = ai.name,
-                            category = firsCategory,
-                            price = ai.priceModel,
-                            logo = ai.logo,
-                            onClick = { onAiClick(ai.id) }
-                        )
-
-                        val isFirstAd = index == firstAdIndex
-                        val isLaterAd = (index > firstAdIndex) && ((index - firstAdIndex) % frequency == 0)
-
-                        if (isFirstAd || isLaterAd) {
-                            val adPoolIndex = if (isFirstAd) 0 else ((index - firstAdIndex) / frequency)
-
-                            if (adPoolIndex < uiState.adPool.size) {
-                                AIpediaNativeAdItem(
-                                    nativeAd = uiState.adPool[adPoolIndex],
-                                    modifier = Modifier.padding(vertical = 12.dp)
+                    uiState.errorMessage != null -> {
+                        item {
+                            Box(modifier = Modifier.fillParentMaxHeight().fillMaxWidth()) {
+                                AIpediaErrorState(
+                                    onRetry = { homeViewmodel.onRetry() }
                                 )
+                            }
+                        }
+                    }
+
+                    uiState.aiList.isEmpty() -> {
+                        item {
+                            Box(modifier = Modifier.fillParentMaxHeight().fillMaxWidth()) {
+                                AIpediaEmptyState()
+                            }
+                        }
+                    }
+
+                    else -> {
+                        val firstAdIndex = AdConfig.FIRST_AD_INDEX
+                        val frequency = AdConfig.FREQUENCY
+
+                        itemsIndexed(items = uiState.aiList, key = { _, ai -> ai.id }) { index, ai ->
+                            AiPediaCard(
+                                name = ai.name,
+                                category = ai.categories?.firstOrNull()?.localizedName(),
+                                price = ai.priceModel,
+                                logo = ai.logo,
+                                onClick = { onAiClick(ai.id) }
+                            )
+
+                            val isFirstAd = index == firstAdIndex
+                            val isLaterAd = (index > firstAdIndex) && ((index - firstAdIndex) % frequency == 0)
+
+                            if (isFirstAd || isLaterAd) {
+                                val adPoolIndex = if (isFirstAd) 0 else ((index - firstAdIndex) / frequency)
+                                if (adPoolIndex < uiState.adPool.size) {
+                                    AIpediaNativeAdItem(
+                                        nativeAd = uiState.adPool[adPoolIndex],
+                                        modifier = Modifier.padding(vertical = 12.dp)
+                                    )
+                                }
                             }
                         }
                     }

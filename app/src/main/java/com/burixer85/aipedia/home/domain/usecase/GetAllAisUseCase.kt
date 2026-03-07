@@ -10,7 +10,10 @@ class GetAllAisUseCase @Inject constructor(private val homeRepository: HomeRepos
     operator fun invoke(): Flow<List<Ai>> {
         return homeRepository.getAllAis()
             .onStart {
-                homeRepository.loadAndCacheInitialData()
+                try {
+                    homeRepository.loadAndCacheInitialData()
+                } catch (e: Exception) {
+                }
             }
     }
 }
