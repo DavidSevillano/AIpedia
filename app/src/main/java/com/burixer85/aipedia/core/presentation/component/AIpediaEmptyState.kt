@@ -37,7 +37,8 @@ fun AIpediaEmptyState(
             text = stringResource(R.string.HomeScreen_Text_Title_NoResults),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(8.dp))

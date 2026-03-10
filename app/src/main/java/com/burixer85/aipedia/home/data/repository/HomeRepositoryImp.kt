@@ -25,11 +25,10 @@ class HomeRepositoryImp @Inject constructor(
 ) : HomeRepository {
 
     override fun getAllAis(): Flow<List<Ai>> {
-        val result = aiDao.getAllAis()
+        return aiDao.getAllAis()
             .map { listAiWithCategories ->
                 listAiWithCategories.map { it.toDomain() }
             }
-        return result
     }
 
     override fun getAllCategories(): Flow<List<Category>> {

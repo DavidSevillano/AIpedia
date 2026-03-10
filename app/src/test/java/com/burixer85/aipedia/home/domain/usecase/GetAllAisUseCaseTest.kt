@@ -25,7 +25,7 @@ class GetAllAisUseCaseTest {
     private val getAllAis = GetAllAisUseCase(homeRepository)
 
     @Test
-    fun invoke_emit_data_from_repository_and_trigger_sync() = runTest {
+    fun invoke_emits_data_from_repository_and_trigger_sync() = runTest {
         val mockAiList = listOf(
             Ai(
                 id = "1", name = "Test AI", descriptionEs = "", descriptionEn = "",
@@ -81,7 +81,7 @@ class GetAllAisUseCaseTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `invoke_emits_new_data_when_repository_emits_updates`() = runTest {
+    fun invoke_emits_new_data_when_repository_emits_updates() = runTest {
         val sharedFlow = MutableSharedFlow<List<Ai>>()
         coEvery { homeRepository.getAllAis() } returns sharedFlow
 
@@ -99,10 +99,9 @@ class GetAllAisUseCaseTest {
         sharedFlow.emit(listA)
         sharedFlow.emit(listB)
 
-        // Then
         assertEquals(2, results.size)
-        assertEquals("AI A", results[0][0].name) // Ahora sí coincidirá
-        assertEquals("AI B", results[1][1].name) // Ahora sí coincidirá
+        assertEquals("AI A", results[0][0].name)
+        assertEquals("AI B", results[1][1].name)
 
         job.cancel()
     }

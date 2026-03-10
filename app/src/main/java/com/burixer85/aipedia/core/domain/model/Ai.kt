@@ -19,7 +19,9 @@ data class Ai(
     val logo: String,
     val categories: List<Category> = emptyList(),
     val features: List<Feature> = emptyList(),
-    val platforms: List<Platform> = emptyList()
+    val platforms: List<Platform> = emptyList(),
+    @SerialName("is_published")
+    val isPublished: Boolean = true
 )
 
 fun Ai.toData(): AiEntity {
@@ -31,5 +33,6 @@ fun Ai.toData(): AiEntity {
         website = this.website,
         priceModel = this.priceModel,
         logoUrl = this.logo,
+        isPublished = this.isPublished
     )
 }

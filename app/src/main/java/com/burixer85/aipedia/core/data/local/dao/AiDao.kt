@@ -17,11 +17,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AiDao {
     @Transaction
-    @Query("SELECT * FROM ai")
+    @Query("SELECT * FROM ai WHERE is_published = 1")
     fun getAllAis(): Flow<List<AiWithCategories>>
 
     @Transaction
-    @Query("SELECT * FROM ai WHERE id = :aiId")
+    @Query("SELECT * FROM ai WHERE id = :aiId AND is_published = 1")
     fun getAiById(aiId: String): AiWithCategories?
 
     @Query("DELETE FROM ai")

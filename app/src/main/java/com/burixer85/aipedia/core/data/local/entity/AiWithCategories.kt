@@ -43,6 +43,7 @@ fun AiWithCategories.toDomain(): Ai {
         logo = this.ai.logoUrl,
         categories = this.categories.map { it.toDomain() },
         features = this.features.map { it.toDomain() },
-        platforms = this.platforms.map { it.toDomain() }
+        platforms = this.platforms.map { it.toDomain() },
+        isPublished = this.ai.isPublished
     )
 }
