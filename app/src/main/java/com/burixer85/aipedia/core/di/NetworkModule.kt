@@ -6,6 +6,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.compose.auth.ComposeAuth
+import io.github.jan.supabase.compose.auth.googleNativeLogin
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import javax.inject.Singleton
@@ -21,7 +24,11 @@ object NetworkModule {
             supabaseUrl = BuildConfig.SUPABASE_URL,
             supabaseKey = BuildConfig.SUPABASE_KEY
         ) {
-            install(Postgrest.Companion)
+            install(Postgrest)
+            install(Auth)
+            install(ComposeAuth) {
+                googleNativeLogin(serverClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID)
+            }
         }
     }
 }

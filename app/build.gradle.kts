@@ -31,6 +31,7 @@ android {
 
         buildConfigField("String", "SUPABASE_URL", "\"${localProperties.getProperty("supabase.url")}\"")
         buildConfigField("String", "SUPABASE_KEY", "\"${localProperties.getProperty("supabase.key")}\"")
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${localProperties.getProperty("google.web.client.id", "")}\"")
 
         buildConfigField("String", "TEST_DEVICE_ID", "\"${localProperties.getProperty("admob.test.device.id")}\"")
         buildConfigField("String", "NATIVE_AD_ID", "\"ca-app-pub-3940256099942544/2247696110\"")
@@ -123,6 +124,13 @@ dependencies {
     // Supabase
     implementation(platform(libs.supabase.bom))
     implementation(libs.supabase.postgrest)
+
+    // Auth
+    implementation(libs.supabase.auth)
+    implementation(libs.supabase.compose.auth)
+    implementation(libs.credentials)
+    implementation(libs.credentials.play.services)
+    implementation(libs.googleid)
 
     // Hilt
     implementation(libs.hilt.android)
