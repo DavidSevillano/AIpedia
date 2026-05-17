@@ -1,6 +1,7 @@
 package com.burixer85.aipedia.detail.presentation
 
 import android.content.Intent
+import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -36,6 +37,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -43,7 +46,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -75,12 +80,14 @@ import com.burixer85.aipedia.ui.theme.MdOnSurfaceVariant
 import com.burixer85.aipedia.ui.theme.MdOutline
 import com.burixer85.aipedia.ui.theme.MdOutlineVariant
 import com.burixer85.aipedia.ui.theme.MdSurfaceLow
+import io.github.jan.supabase.SupabaseClient
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     aiId: String?,
     onBack: () -> Unit,
+    supabase: SupabaseClient,
     viewModel: DetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -90,8 +97,18 @@ fun DetailScreen(
     var selectedFeature by remember { mutableStateOf<Feature?>(null) }
     var showSheet by remember { mutableStateOf(false) }
 
+    val authSheetState = rememberModalBottomSheetState()
+    val reviewSheetState = rememberModalBottomSheetState()
+    var showAuthSheet by remember { mutableStateOf(false) }
+    var showWriteReviewSheet by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val deviceId = remember {
+        Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+    }
+
     LaunchedEffect(aiId) {
-        aiId?.let { viewModel.loadAiDetails(it) }
+        aiId?.let { viewModel.loadAiDetails(it, deviceId) }
     }
 
     Box(
@@ -263,6 +280,75 @@ fun DetailScreen(
                         }
                     }
 
+                    // Valoración section
+                    Spacer(modifier = Modifier.height(28.dp))
+                    SectionLabel(
+                        text = "Valoración",
+                        modifier = Modifier.padding(horizontal = 22.dp)
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Column(
+                        modifier = Modifier.padding(horizontal = 22.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        uiState.ratingSummary?.let { summary ->
+                            RatingSummaryCard(summary = summary)
+                        }
+                        AnonymousStarRow(
+                            currentScore = uiState.reviews
+                                .firstOrNull { it.userId == uiState.currentUser?.id }
+                                ?.score ?: uiState.userRating
+                        )
+                    }
+
+                    // Reseñas section
+                    Spacer(modifier = Modifier.height(28.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 22.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        SectionLabel(text = "Reseñas")
+                        Text(
+                            text = "+ Escribir",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.clickable {
+                                if (uiState.currentUser != null) showWriteReviewSheet = true
+                                else showAuthSheet = true
+                            }
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Column(
+                        modifier = Modifier.padding(horizontal = 22.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        uiState.reviews.take(5).forEach { review ->
+                            ReviewCard(review = review)
+                        }
+                        if (uiState.currentUser == null) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(18.dp))
+                                    .background(MdSurfaceLow)
+                                    .clickable { showAuthSheet = true }
+                                    .padding(vertical = 16.dp)
+                            ) {
+                                Text(
+                                    text = "Inicia sesión para escribir una reseña",
+                                    fontSize = 13.sp,
+                                    color = MdOnSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+
                     Spacer(modifier = Modifier.height(30.dp))
                 }
             }
@@ -321,6 +407,14 @@ fun DetailScreen(
             }
         }
 
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .statusBarsPadding()
+                .padding(top = 8.dp)
+        )
+
         if (uiState.isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center),
@@ -335,6 +429,35 @@ fun DetailScreen(
         onDismissRequest = { showSheet = false },
         sheetState = sheetState,
     )
+
+    if (showAuthSheet) {
+        AuthBottomSheet(
+            supabase = supabase,
+            sheetState = authSheetState,
+            onDismiss = { showAuthSheet = false },
+            onAuthSuccess = {
+                showWriteReviewSheet = true
+                scope.launch { snackbarHostState.showSnackbar("Sesión iniciada con Google") }
+            }
+        )
+    }
+
+    if (showWriteReviewSheet) {
+        uiState.ai?.let { ai ->
+            val existingReview = uiState.reviews.firstOrNull { it.userId == uiState.currentUser?.id }
+            WriteReviewBottomSheet(
+                aiName = ai.name,
+                initialScore = existingReview?.score ?: 0,
+                initialBody = existingReview?.body ?: "",
+                sheetState = reviewSheetState,
+                onDismiss = { showWriteReviewSheet = false },
+                onSubmit = { score, body ->
+                    viewModel.submitReview(ai.id, score, body)
+                    showWriteReviewSheet = false
+                }
+            )
+        }
+    }
 }
 
 @Composable
