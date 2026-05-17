@@ -1,5 +1,10 @@
 package com.burixer85.aipedia.core.presentation.component
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,56 +16,70 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.burixer85.aipedia.ui.theme.MdOnSurfaceVariant
+import com.burixer85.aipedia.ui.theme.MdSurfaceLow
 
 @Composable
-fun AiPediaCardPlaceholder() {
-    Card(
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-        ),
-        modifier = Modifier
+fun AiPediaCardPlaceholder(modifier: Modifier = Modifier) {
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val alpha by transition.animateFloat(
+        initialValue = 0.06f,
+        targetValue = 0.13f,
+        animationSpec = infiniteRepeatable(tween(900), RepeatMode.Reverse),
+        label = "shimmer-alpha"
+    )
+
+    Box(
+        modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(2.dp)
+            .clip(RoundedCornerShape(22.dp))
+            .background(MdSurfaceLow)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f))
+                    .size(56.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MdOnSurfaceVariant.copy(alpha = alpha))
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(14.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(0.6f)
-                        .height(20.dp)
-                        .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f))
+                        .fillMaxWidth(0.55f)
+                        .height(18.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(MdOnSurfaceVariant.copy(alpha = alpha))
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(0.4f)
-                        .height(16.dp)
-                        .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.05f))
+                        .fillMaxWidth(0.35f)
+                        .height(13.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(MdOnSurfaceVariant.copy(alpha = alpha * 0.7f))
                 )
             }
+
+            Spacer(modifier = Modifier.width(12.dp))
+            Box(
+                modifier = Modifier
+                    .width(52.dp)
+                    .height(22.dp)
+                    .clip(RoundedCornerShape(999.dp))
+                    .background(MdOnSurfaceVariant.copy(alpha = alpha * 0.6f))
+            )
         }
     }
 }

@@ -1,18 +1,34 @@
 package com.burixer85.aipedia.core.presentation.component
 
-
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.burixer85.aipedia.core.domain.model.Feature
 import com.burixer85.aipedia.core.util.localizedDescription
 import com.burixer85.aipedia.core.util.localizedName
+import com.burixer85.aipedia.ui.theme.MdOnSurfaceMuted
+import com.burixer85.aipedia.ui.theme.MdOnSurfaceStrong
+import com.burixer85.aipedia.ui.theme.MdSurfaceHigh
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,26 +42,29 @@ fun FeatureDetailModal(
         ModalBottomSheet(
             onDismissRequest = onDismissRequest,
             sheetState = sheetState,
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            dragHandle = { BottomSheetDefaults.DragHandle(color = Color.Gray) },
+            containerColor = MdSurfaceHigh,
+            dragHandle = {
+                BottomSheetDefaults.DragHandle(color = MdOnSurfaceMuted)
+            },
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .windowInsetsPadding(WindowInsets.navigationBars)
-                    .padding(start = 24.dp, end = 24.dp, bottom = 32.dp, top = 8.dp)
+                    .padding(start = 22.dp, end = 22.dp, bottom = 36.dp, top = 8.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     AsyncImage(
                         model = selectedFeature.icon,
                         contentDescription = selectedFeature.localizedName(),
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(28.dp)
                     )
-                    Spacer(Modifier.width(16.dp))
+                    Spacer(Modifier.width(14.dp))
                     Text(
                         text = selectedFeature.localizedName(),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface
+                        fontSize = 22.sp,
+                        color = MdOnSurfaceStrong,
+                        style = MaterialTheme.typography.titleLarge
                     )
                 }
 
@@ -54,7 +73,7 @@ fun FeatureDetailModal(
                 Text(
                     text = selectedFeature.localizedDescription(),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                    color = MaterialTheme.colorScheme.onSurface,
                     lineHeight = 24.sp
                 )
             }

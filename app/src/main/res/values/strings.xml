@@ -3,6 +3,8 @@
 
     <!-- HomeScreen -->
     <string name="HomeScreen_Text_Title_App">AIpedia</string>
+    <string name="HomeScreen_Text_Eyebrow">Tu enciclopedia de IA</string>
+    <string name="HomeScreen_Text_Section_Popular">Populares esta semana</string>
     <string name="HomeScreen_Text_Title_NoResults">No se encontraron resultados</string>
     <string name="HomeScreen_Text_Subtitle_NoResults">No hemos encontrado ninguna IA que coincida con tus filtros actuales. Intenta cambiar tu búsqueda o la categoría seleccionada.</string>
     <string name="HomeScreen_Text_Title_Error">¡Algo salió mal!</string>

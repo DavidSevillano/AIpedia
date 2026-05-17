@@ -3,6 +3,8 @@
 
     <!-- HomeScreen -->
     <string name="HomeScreen_Text_Title_App">AIpedia</string>
+    <string name="HomeScreen_Text_Eyebrow">Your AI encyclopedia</string>
+    <string name="HomeScreen_Text_Section_Popular">Popular this week</string>
     <string name="HomeScreen_Text_Title_NoResults">No results found</string>
     <string name="HomeScreen_Text_Subtitle_NoResults">We couldn\'t find any AI matching your current filters.</string>
     <string name="HomeScreen_Text_Title_Error">Something went wrong!</string>

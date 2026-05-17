@@ -9,41 +9,53 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = BlueAccent,
-    background = DeepBackground,
-    onBackground = WhiteText,
-    surfaceVariant = BlueCardBackground,
-    onSurfaceVariant = GrayText,
-    onSurface = WhiteText
+    primary = MdPrimary,
+    onPrimary = MdOnPrimary,
+    primaryContainer = MdPrimaryContainer,
+    onPrimaryContainer = MdOnPrimaryContainer,
+    secondary = MdSecondary,
+    tertiary = MdTertiary,
+    background = MdBackground,
+    onBackground = MdOnSurfaceStrong,
+    surface = MdSurface,
+    surfaceVariant = MdSurfaceLow,
+    surfaceContainerLow = MdSurfaceLow,
+    surfaceContainer = MdSurfaceContainer,
+    surfaceContainerHigh = MdSurfaceHigh,
+    surfaceContainerHighest = MdSurfaceHighest,
+    onSurface = MdOnSurface,
+    onSurfaceVariant = MdOnSurfaceVariant,
+    outline = MdOutline,
+    outlineVariant = MdOutlineVariant,
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = BlueAccent,
-    background = DeepBackground,
-    onBackground = WhiteText,
-    surfaceVariant = BlueCardBackground,
-    onSurfaceVariant = GrayText,
-    onSurface = WhiteText
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val LightColorScheme = darkColorScheme(
+    primary = MdPrimary,
+    onPrimary = MdOnPrimary,
+    primaryContainer = MdPrimaryContainer,
+    onPrimaryContainer = MdOnPrimaryContainer,
+    secondary = MdSecondary,
+    tertiary = MdTertiary,
+    background = MdBackground,
+    onBackground = MdOnSurfaceStrong,
+    surface = MdSurface,
+    surfaceVariant = MdSurfaceLow,
+    surfaceContainerLow = MdSurfaceLow,
+    surfaceContainer = MdSurfaceContainer,
+    surfaceContainerHigh = MdSurfaceHigh,
+    surfaceContainerHighest = MdSurfaceHighest,
+    onSurface = MdOnSurface,
+    onSurfaceVariant = MdOnSurfaceVariant,
+    outline = MdOutline,
+    outlineVariant = MdOutlineVariant,
 )
 
 @Composable
 fun AIpediaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
@@ -52,7 +64,6 @@ fun AIpediaTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
