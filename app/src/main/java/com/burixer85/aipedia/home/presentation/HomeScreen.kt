@@ -10,25 +10,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bookmarks
-import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.outlined.BookmarkBorder
-import androidx.compose.material.icons.outlined.Explore
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,8 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -59,7 +45,6 @@ import com.burixer85.aipedia.ui.theme.MdBackground
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceMuted
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceStrong
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceVariant
-import com.burixer85.aipedia.ui.theme.MdPrimaryContainer
 
 @Composable
 fun HomeScreen(
@@ -236,83 +221,5 @@ fun HomeScreen(
             }
         }
 
-        // Floating bottom navigation
-        BottomNav(modifier = Modifier.align(Alignment.BottomCenter))
-    }
-}
-
-@Composable
-private fun BottomNav(modifier: Modifier = Modifier) {
-    val items = listOf(
-        NavItem("home", "Inicio", Icons.Filled.Home, Icons.Outlined.Home),
-        NavItem("explore", "Explorar", Icons.Filled.Explore, Icons.Outlined.Explore),
-        NavItem("saved", "Guardados", Icons.Filled.Bookmarks, Icons.Outlined.BookmarkBorder),
-    )
-
-    Box(
-        modifier = modifier
-            .padding(horizontal = 16.dp)
-            .navigationBarsPadding()
-            .padding(bottom = 12.dp)
-    ) {
-        Surface(
-            shape = RoundedCornerShape(32.dp),
-            color = Color(0xD91C2026),
-            tonalElevation = 0.dp,
-            shadowElevation = 20.dp,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier.padding(6.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                items.forEachIndexed { i, item ->
-                    NavBarItem(item = item, isActive = i == 0, modifier = Modifier.weight(1f))
-                }
-            }
-        }
-    }
-}
-
-private data class NavItem(
-    val id: String,
-    val label: String,
-    val iconFilled: ImageVector,
-    val iconOutlined: ImageVector
-)
-
-@Composable
-private fun NavBarItem(item: NavItem, isActive: Boolean, modifier: Modifier = Modifier) {
-    val bg = if (isActive) MdPrimaryContainer else Color.Transparent
-    val tint = if (isActive) MaterialTheme.colorScheme.onPrimaryContainer
-    else MdOnSurfaceVariant
-
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .height(44.dp)
-            .background(bg, RoundedCornerShape(26.dp))
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                imageVector = if (isActive) item.iconFilled else item.iconOutlined,
-                contentDescription = item.label,
-                tint = tint,
-                modifier = Modifier.size(20.dp)
-            )
-            if (isActive) {
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(
-                    text = item.label,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = tint,
-                    letterSpacing = (-0.065).sp
-                )
-            }
-        }
     }
 }

@@ -10,4 +10,5 @@ interface RatingsRepository {
     suspend fun getUserReview(aiId: String, userId: String): Review?
     suspend fun submitRating(aiId: String, deviceId: String, score: Int)
     suspend fun submitReview(aiId: String, userId: String, displayName: String, score: Int, body: String?)
+    suspend fun getUserReviews(userId: String): List<Review>
 }

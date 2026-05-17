@@ -68,4 +68,10 @@ class RatingsRepositoryImp @Inject constructor(
             ReviewInsertDto(aiId = aiId, userId = userId, displayName = displayName, score = score, body = body)
         ) { onConflict = "ai_id,user_id" }
     }
+
+    override suspend fun getUserReviews(userId: String): List<Review> =
+        supabase.from("ai_reviews")
+            .select { filter { eq("user_id", userId) } }
+            .decodeList<ReviewDto>()
+            .map { it.toDomain() }
 }
