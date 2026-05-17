@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -81,8 +82,11 @@ fun NavigationHost(navHostController: NavHostController) {
             }
 
             composable(NavigationRoute.Profile.route) {
+                val ctx = LocalContext.current
                 ProfileScreen(
+                    supabase = supabase,
                     onSignOut = {
+                        Toast.makeText(ctx, "Sesión cerrada correctamente", Toast.LENGTH_SHORT).show()
                         navHostController.navigate(NavigationRoute.Home.route) {
                             popUpTo(NavigationRoute.Home.route) { inclusive = true }
                             launchSingleTop = true

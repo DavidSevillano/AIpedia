@@ -34,7 +34,7 @@ class ProfileViewModel @Inject constructor(
         getCurrentUserUseCase()
             .onEach { user ->
                 if (user == null) {
-                    _uiState.value = ProfileUiState.Loading
+                    _uiState.value = ProfileUiState.NotLoggedIn
                     return@onEach
                 }
                 try {

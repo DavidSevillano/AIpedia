@@ -2,6 +2,7 @@ package com.burixer85.aipedia.profile.presentation
 
 sealed class ProfileUiState {
     object Loading : ProfileUiState()
+    object NotLoggedIn : ProfileUiState()
     data class Success(
         val displayName: String,
         val email: String,

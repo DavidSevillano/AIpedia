@@ -1,6 +1,7 @@
 package com.burixer85.aipedia.profile.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,13 +17,21 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,16 +50,61 @@ import com.burixer85.aipedia.ui.theme.MdOnSurfaceStrong
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceVariant
 import com.burixer85.aipedia.ui.theme.MdPrimary
 import com.burixer85.aipedia.ui.theme.MdSurfaceContainer
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
+import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
+import io.github.jan.supabase.compose.auth.composeAuth
 
 @Composable
 fun ProfileScreen(
+    supabase: SupabaseClient,
     onSignOut: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var showConfirmDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.signOutEvent.collect { onSignOut() }
+    }
+
+    if (showConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = { showConfirmDialog = false },
+            title = {
+                Text(
+                    text = "Cerrar sesión",
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MdOnSurfaceStrong
+                )
+            },
+            text = {
+                Text(
+                    text = "¿Estás seguro de que quieres cerrar sesión?",
+                    fontSize = 14.sp,
+                    color = MdOnSurfaceVariant
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showConfirmDialog = false
+                    viewModel.signOut()
+                }) {
+                    Text(
+                        text = "Cerrar sesión",
+                        color = Color(0xFFFF7B7B),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showConfirmDialog = false }) {
+                    Text(text = "Cancelar", color = MdOnSurfaceVariant)
+                }
+            },
+            containerColor = MdSurfaceContainer
+        )
     }
 
     Box(
@@ -60,9 +114,10 @@ fun ProfileScreen(
     ) {
         when (val state = uiState) {
             is ProfileUiState.Loading -> ProfileLoadingContent()
+            is ProfileUiState.NotLoggedIn -> ProfileNotLoggedInContent(supabase = supabase)
             is ProfileUiState.Success -> ProfileSuccessContent(
                 state = state,
-                onSignOut = viewModel::signOut
+                onSignOutClick = { showConfirmDialog = true }
             )
             is ProfileUiState.Error -> ProfileErrorContent(state.message)
         }
@@ -73,6 +128,63 @@ fun ProfileScreen(
 private fun ProfileLoadingContent() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(text = "Cargando perfil...", color = MdOnSurfaceVariant, fontSize = 15.sp)
+    }
+}
+
+@Composable
+private fun ProfileNotLoggedInContent(supabase: SupabaseClient) {
+    val signInState = supabase.composeAuth.rememberSignInWithGoogle(
+        onResult = { },
+        fallback = {}
+    )
+
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(horizontal = 32.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.AccountCircle,
+                contentDescription = null,
+                tint = MdOnSurfaceMuted,
+                modifier = Modifier.size(72.dp)
+            )
+            Text(
+                text = "No has iniciado sesión",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MdOnSurfaceStrong
+            )
+            Text(
+                text = "Inicia sesión para ver tu perfil, escribir reseñas y guardar favoritos.",
+                fontSize = 14.sp,
+                color = MdOnSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height(4.dp))
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(Color.White)
+                    .clickable { signInState.startFlow() }
+                    .padding(14.dp)
+            ) {
+                Text(
+                    text = "Continuar con Google",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFF333333)
+                )
+            }
+            Text(
+                text = "Solo para reseñas · Puedes valorar sin cuenta",
+                fontSize = 11.sp,
+                color = MdOnSurfaceMuted
+            )
+        }
     }
 }
 
@@ -92,7 +204,7 @@ private fun ProfileErrorContent(message: String) {
 @Composable
 private fun ProfileSuccessContent(
     state: ProfileUiState.Success,
-    onSignOut: () -> Unit
+    onSignOutClick: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -115,7 +227,7 @@ private fun ProfileSuccessContent(
         item { Spacer(Modifier.height(16.dp)) }
         item {
             Button(
-                onClick = onSignOut,
+                onClick = onSignOutClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
