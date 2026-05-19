@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -100,11 +99,13 @@ fun CompareScreen(
             )
         }
 
-        if (uiState.aiA != null && uiState.aiB != null) {
+        val aiA = uiState.aiA
+        val aiB = uiState.aiB
+        if (aiA != null && aiB != null) {
             Spacer(Modifier.height(16.dp))
             ComparisonTable(
-                aiA = uiState.aiA!!,
-                aiB = uiState.aiB!!,
+                aiA = aiA,
+                aiB = aiB,
                 summaryA = uiState.summaryA,
                 summaryB = uiState.summaryB,
                 modifier = Modifier.padding(horizontal = 16.dp)
