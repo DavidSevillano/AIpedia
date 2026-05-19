@@ -18,10 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Explore
+import androidx.compose.material.icons.filled.Compare
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material.icons.outlined.Compare
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
@@ -49,6 +49,7 @@ import androidx.navigation.navArgument
 import com.burixer85.aipedia.core.di.SupabaseEntryPoint
 import com.burixer85.aipedia.detail.presentation.DetailScreen
 import com.burixer85.aipedia.home.presentation.HomeScreen
+import com.burixer85.aipedia.compare.presentation.CompareScreen
 import com.burixer85.aipedia.profile.presentation.ProfileScreen
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceVariant
 import com.burixer85.aipedia.ui.theme.MdPrimaryContainer
@@ -93,6 +94,10 @@ fun NavigationHost(navHostController: NavHostController) {
                         }
                     }
                 )
+            }
+
+            composable(NavigationRoute.Compare.route) {
+                CompareScreen()
             }
 
             composable(
@@ -148,7 +153,7 @@ private data class NavItem(
 
 private val navItems = listOf(
     NavItem(NavigationRoute.Home.route, "Inicio", Icons.Filled.Home, Icons.Outlined.Home),
-    NavItem("explore", "Explorar", Icons.Filled.Explore, Icons.Outlined.Explore),
+    NavItem(NavigationRoute.Compare.route, "Comparar", Icons.Filled.Compare, Icons.Outlined.Compare),
     NavItem(NavigationRoute.Profile.route, "Perfil", Icons.Filled.Person, Icons.Outlined.Person),
 )
 
@@ -179,7 +184,7 @@ private fun SharedBottomNav(
                     NavBarItem(
                         item = item,
                         isActive = currentRoute == item.route,
-                        onClick = if (item.route != "explore") { { onItemSelected(item.route) } } else null,
+                        onClick = { onItemSelected(item.route) },
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -192,7 +197,7 @@ private fun SharedBottomNav(
 private fun NavBarItem(
     item: NavItem,
     isActive: Boolean,
-    onClick: (() -> Unit)?,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val bg = if (isActive) MdPrimaryContainer else Color.Transparent
@@ -203,14 +208,10 @@ private fun NavBarItem(
         modifier = modifier
             .height(44.dp)
             .background(bg, RoundedCornerShape(26.dp))
-            .then(
-                if (onClick != null) {
-                    Modifier.clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = onClick
-                    )
-                } else Modifier
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = onClick
             )
     ) {
         Row(
