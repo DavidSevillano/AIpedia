@@ -81,10 +81,10 @@ class CompareViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val summary = getRatingSummaryUseCase(aiId)
-                _uiState.update {
+                _uiState.update { state ->
                     when (target) {
-                        PickerTarget.A -> it.copy(summaryA = summary)
-                        PickerTarget.B -> it.copy(summaryB = summary)
+                        PickerTarget.A -> if (state.aiA?.id == aiId) state.copy(summaryA = summary) else state
+                        PickerTarget.B -> if (state.aiB?.id == aiId) state.copy(summaryB = summary) else state
                     }
                 }
             } catch (e: Exception) {
