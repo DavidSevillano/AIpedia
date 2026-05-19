@@ -7,6 +7,7 @@ import com.burixer85.aipedia.core.domain.model.Ai
 import com.burixer85.aipedia.ratings.domain.model.RatingSummary
 import com.burixer85.aipedia.ratings.domain.usecase.GetRatingSummaryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -86,7 +87,9 @@ class CompareViewModel @Inject constructor(
                         PickerTarget.B -> it.copy(summaryB = summary)
                     }
                 }
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+            }
         }
     }
 }
