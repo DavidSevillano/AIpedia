@@ -44,6 +44,13 @@ fun AiWithCategories.toDomain(): Ai {
         categories = this.categories.map { it.toDomain() },
         features = this.features.map { it.toDomain() },
         platforms = this.platforms.map { it.toDomain() },
-        isPublished = this.ai.isPublished
+        isPublished = this.ai.isPublished,
+        company = this.ai.company,
+        releaseYear = this.ai.releaseYear,
+        hasApi = this.ai.hasApi,
+        hasFreeTier = this.ai.hasFreeTier,
+        startingPrice = this.ai.startingPrice,
+        taglineEs = this.ai.taglineEs,
+        taglineEn = this.ai.taglineEn,
     )
 }

@@ -2,6 +2,7 @@ package com.burixer85.aipedia.compare.presentation
 
 import com.burixer85.aipedia.compare.domain.usecase.GetAllAisForPickerUseCase
 import com.burixer85.aipedia.core.domain.model.Ai
+import com.burixer85.aipedia.core.domain.usecase.GetComparisonDataUseCase
 import com.burixer85.aipedia.ratings.domain.model.RatingSummary
 import com.burixer85.aipedia.ratings.domain.usecase.GetRatingSummaryUseCase
 import io.mockk.coEvery
@@ -27,6 +28,7 @@ class CompareViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
     private val getAllAisForPickerUseCase = mockk<GetAllAisForPickerUseCase>()
     private val getRatingSummaryUseCase = mockk<GetRatingSummaryUseCase>()
+    private val getComparisonDataUseCase = mockk<GetComparisonDataUseCase>(relaxed = true)
 
     private val aiA = Ai("ai-1", "ChatGPT", "Desc ES", "Desc EN", "https://openai.com", "Freemium", "https://logo.com/chatgpt.png")
     private val aiB = Ai("ai-2", "Claude", "Desc ES", "Desc EN", "https://claude.ai", "Freemium", "https://logo.com/claude.png")
@@ -43,7 +45,8 @@ class CompareViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private fun buildViewModel() = CompareViewModel(getAllAisForPickerUseCase, getRatingSummaryUseCase)
+    private fun buildViewModel() =
+        CompareViewModel(getAllAisForPickerUseCase, getRatingSummaryUseCase, getComparisonDataUseCase)
 
     @Test
     fun init_loads_all_ais_into_allAis() = runTest {

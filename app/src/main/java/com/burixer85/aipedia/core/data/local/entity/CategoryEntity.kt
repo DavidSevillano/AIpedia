@@ -13,12 +13,15 @@ data class CategoryEntity(
     val nameEs: String,
     @ColumnInfo("name_en")
     val nameEn: String,
+    @ColumnInfo("icon_url")
+    val iconUrl: String? = null,
 )
 
 fun CategoryEntity.toDomain(): Category {
     return Category(
         id = this.id,
         nameEs = this.nameEs,
-        nameEn = this.nameEn
+        nameEn = this.nameEn,
+        iconUrl = this.iconUrl
     )
 }

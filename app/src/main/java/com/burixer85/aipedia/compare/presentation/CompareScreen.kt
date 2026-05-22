@@ -38,9 +38,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.burixer85.aipedia.core.domain.model.Ai
+import com.burixer85.aipedia.core.domain.model.AiSpec
+import com.burixer85.aipedia.core.domain.model.ComparisonData
+import com.burixer85.aipedia.core.domain.model.PricingPlan
+import com.burixer85.aipedia.core.domain.model.ProCon
 import com.burixer85.aipedia.core.presentation.component.PricePill
 import com.burixer85.aipedia.core.util.localizedDescription
+import com.burixer85.aipedia.core.util.localizedLabel
 import com.burixer85.aipedia.core.util.localizedName
+import com.burixer85.aipedia.core.util.localizedText
+import com.burixer85.aipedia.core.util.localizedValue
 import com.burixer85.aipedia.ratings.domain.model.RatingSummary
 import com.burixer85.aipedia.ui.theme.MdBackground
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceMuted
@@ -108,6 +115,8 @@ fun CompareScreen(
                 aiB = aiB,
                 summaryA = uiState.summaryA,
                 summaryB = uiState.summaryB,
+                comparisonA = uiState.comparisonA,
+                comparisonB = uiState.comparisonB,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
@@ -193,12 +202,24 @@ private fun AiSlotCard(
 
 // ── Comparison table ─────────────────────────────────────────────────────────
 
+private fun formatStartingPrice(ai: Ai): String {
+    val price = ai.startingPrice
+    return when {
+        price != null && price % 1.0 == 0.0 -> "${price.toInt()} €/mes"
+        price != null -> "%.2f €/mes".format(price)
+        ai.hasFreeTier -> "Gratis"
+        else -> "–"
+    }
+}
+
 @Composable
 private fun ComparisonTable(
     aiA: Ai,
     aiB: Ai,
     summaryA: RatingSummary?,
     summaryB: RatingSummary?,
+    comparisonA: ComparisonData?,
+    comparisonB: ComparisonData?,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -274,6 +295,155 @@ private fun ComparisonTable(
                         has = aiB.features.any { it.id == feature.id }
                     )
                 }
+            }
+        }
+        RowDivider()
+        CompareRow(label = "Empresa") {
+            TextCell(aiA.company, Modifier.weight(1f))
+            TextCell(aiB.company, Modifier.weight(1f))
+        }
+        RowDivider()
+        CompareRow(label = "Año") {
+            TextCell(aiA.releaseYear?.toString(), Modifier.weight(1f))
+            TextCell(aiB.releaseYear?.toString(), Modifier.weight(1f))
+        }
+        RowDivider()
+        CompareRow(label = "Precio inicial") {
+            TextCell(formatStartingPrice(aiA), Modifier.weight(1f))
+            TextCell(formatStartingPrice(aiB), Modifier.weight(1f))
+        }
+        RowDivider()
+        CompareRow(label = "API disponible") {
+            BoolCell(aiA.hasApi, Modifier.weight(1f))
+            BoolCell(aiB.hasApi, Modifier.weight(1f))
+        }
+        if (comparisonA != null || comparisonB != null) {
+            RowDivider()
+            CompareRow(label = "Ficha técnica") {
+                SpecCell(comparisonA?.specs.orEmpty(), Modifier.weight(1f))
+                SpecCell(comparisonB?.specs.orEmpty(), Modifier.weight(1f))
+            }
+            RowDivider()
+            CompareRow(label = "Planes") {
+                PlanCell(comparisonA?.plans.orEmpty(), Modifier.weight(1f))
+                PlanCell(comparisonB?.plans.orEmpty(), Modifier.weight(1f))
+            }
+            RowDivider()
+            CompareRow(label = "Ventajas") {
+                ProConListCell(comparisonA?.pros.orEmpty(), true, Modifier.weight(1f))
+                ProConListCell(comparisonB?.pros.orEmpty(), true, Modifier.weight(1f))
+            }
+            RowDivider()
+            CompareRow(label = "Desventajas") {
+                ProConListCell(comparisonA?.cons.orEmpty(), false, Modifier.weight(1f))
+                ProConListCell(comparisonB?.cons.orEmpty(), false, Modifier.weight(1f))
+            }
+            RowDivider()
+            CompareRow(label = "Integraciones") {
+                ChipCell(comparisonA?.integrations.orEmpty().map { it.name }, Modifier.weight(1f))
+                ChipCell(comparisonB?.integrations.orEmpty().map { it.name }, Modifier.weight(1f))
+            }
+            RowDivider()
+            CompareRow(label = "Casos de uso") {
+                ChipCell(
+                    comparisonA?.useCases.orEmpty().map { it.localizedName() },
+                    Modifier.weight(1f)
+                )
+                ChipCell(
+                    comparisonB?.useCases.orEmpty().map { it.localizedName() },
+                    Modifier.weight(1f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TextCell(text: String?, modifier: Modifier = Modifier) {
+    Text(
+        text = text?.takeIf { it.isNotBlank() } ?: "–",
+        color = if (text.isNullOrBlank()) MdOnSurfaceMuted else MdOnSurfaceStrong,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.SemiBold,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun BoolCell(value: Boolean, modifier: Modifier = Modifier) {
+    Text(
+        text = if (value) "✔" else "✘",
+        color = if (value) Color(0xFF34D399) else Color(0xFFF87171),
+        fontSize = 13.sp,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun SpecCell(specs: List<AiSpec>, modifier: Modifier = Modifier) {
+    if (specs.isEmpty()) {
+        Text("–", color = MdOnSurfaceMuted, fontSize = 11.sp, modifier = modifier)
+        return
+    }
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(5.dp)) {
+        specs.forEach { spec ->
+            Column {
+                Text(spec.localizedLabel(), color = MdOnSurfaceMuted, fontSize = 9.sp)
+                Text(
+                    text = spec.localizedValue(),
+                    color = MdOnSurfaceVariant,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PlanCell(plans: List<PricingPlan>, modifier: Modifier = Modifier) {
+    if (plans.isEmpty()) {
+        Text("–", color = MdOnSurfaceMuted, fontSize = 11.sp, modifier = modifier)
+        return
+    }
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(3.dp)) {
+        plans.forEach { plan ->
+            val price = plan.priceMonthly
+            val priceStr = when {
+                price <= 0.0 -> "Gratis"
+                price % 1.0 == 0.0 -> "${price.toInt()} €"
+                else -> "%.2f €".format(price)
+            }
+            Text(
+                text = "${plan.localizedName()} · $priceStr",
+                color = MdOnSurfaceVariant,
+                fontSize = 10.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProConListCell(items: List<ProCon>, isPro: Boolean, modifier: Modifier = Modifier) {
+    if (items.isEmpty()) {
+        Text("–", color = MdOnSurfaceMuted, fontSize = 11.sp, modifier = modifier)
+        return
+    }
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(3.dp)) {
+        items.forEach { item ->
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = if (isPro) "✔" else "✘",
+                    color = if (isPro) Color(0xFF34D399) else Color(0xFFF87171),
+                    fontSize = 9.sp
+                )
+                Text(
+                    text = item.localizedText(),
+                    color = MdOnSurfaceVariant,
+                    fontSize = 10.sp
+                )
             }
         }
     }

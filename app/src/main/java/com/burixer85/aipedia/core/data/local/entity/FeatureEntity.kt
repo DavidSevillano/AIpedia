@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.burixer85.aipedia.core.domain.model.Feature
 
-@Entity(tableName = "features")
+@Entity(tableName = "capabilities")
 data class FeatureEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "name_es")

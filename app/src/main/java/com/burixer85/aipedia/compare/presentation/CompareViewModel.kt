@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.burixer85.aipedia.compare.domain.usecase.GetAllAisForPickerUseCase
 import com.burixer85.aipedia.core.domain.model.Ai
+import com.burixer85.aipedia.core.domain.model.ComparisonData
+import com.burixer85.aipedia.core.domain.usecase.GetComparisonDataUseCase
 import com.burixer85.aipedia.ratings.domain.model.RatingSummary
 import com.burixer85.aipedia.ratings.domain.usecase.GetRatingSummaryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +25,8 @@ data class CompareUiState(
     val aiB: Ai? = null,
     val summaryA: RatingSummary? = null,
     val summaryB: RatingSummary? = null,
+    val comparisonA: ComparisonData? = null,
+    val comparisonB: ComparisonData? = null,
     val pickerTarget: PickerTarget? = null,
     val allAis: List<Ai> = emptyList(),
     val pickerQuery: String = ""
@@ -35,7 +39,8 @@ data class CompareUiState(
 @HiltViewModel
 class CompareViewModel @Inject constructor(
     private val getAllAisForPickerUseCase: GetAllAisForPickerUseCase,
-    private val getRatingSummaryUseCase: GetRatingSummaryUseCase
+    private val getRatingSummaryUseCase: GetRatingSummaryUseCase,
+    private val getComparisonDataUseCase: GetComparisonDataUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CompareUiState())
@@ -67,13 +72,14 @@ class CompareViewModel @Inject constructor(
             }
         }
         fetchSummary(ai.id, target)
+        fetchComparison(ai.id, target)
     }
 
     fun clearSlot(target: PickerTarget) =
         _uiState.update {
             when (target) {
-                PickerTarget.A -> it.copy(aiA = null, summaryA = null)
-                PickerTarget.B -> it.copy(aiB = null, summaryB = null)
+                PickerTarget.A -> it.copy(aiA = null, summaryA = null, comparisonA = null)
+                PickerTarget.B -> it.copy(aiB = null, summaryB = null, comparisonB = null)
             }
         }
 
@@ -85,6 +91,22 @@ class CompareViewModel @Inject constructor(
                     when (target) {
                         PickerTarget.A -> if (state.aiA?.id == aiId) state.copy(summaryA = summary) else state
                         PickerTarget.B -> if (state.aiB?.id == aiId) state.copy(summaryB = summary) else state
+                    }
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+            }
+        }
+    }
+
+    private fun fetchComparison(aiId: String, target: PickerTarget) {
+        viewModelScope.launch {
+            try {
+                val comparison = getComparisonDataUseCase(aiId)
+                _uiState.update { state ->
+                    when (target) {
+                        PickerTarget.A -> if (state.aiA?.id == aiId) state.copy(comparisonA = comparison) else state
+                        PickerTarget.B -> if (state.aiB?.id == aiId) state.copy(comparisonB = comparison) else state
                     }
                 }
             } catch (e: Exception) {

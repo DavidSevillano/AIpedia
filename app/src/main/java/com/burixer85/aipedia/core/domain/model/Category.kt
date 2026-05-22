@@ -10,14 +10,16 @@ data class Category(
     @SerialName("name_es")
     val nameEs: String,
     @SerialName("name_en")
-    val nameEn: String
+    val nameEn: String,
+    @SerialName("icon_url")
+    val iconUrl: String? = null,
 )
 
 fun Category.toData(): CategoryEntity {
     return CategoryEntity(
         id = this.id,
         nameEs = this.nameEs,
-        nameEn = this.nameEn
+        nameEn = this.nameEn,
+        iconUrl = this.iconUrl
     )
 }
-

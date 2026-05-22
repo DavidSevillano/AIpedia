@@ -5,11 +5,14 @@ import androidx.room.Room
 import com.burixer85.aipedia.core.data.local.AipediaDatabase
 import com.burixer85.aipedia.core.data.local.dao.AiDao
 import com.burixer85.aipedia.core.data.local.dao.CategoryDao
+import com.burixer85.aipedia.core.data.repository.ComparisonRepositoryImp
+import com.burixer85.aipedia.core.domain.repository.ComparisonRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.github.jan.supabase.SupabaseClient
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -41,5 +44,9 @@ object CoreModule {
         return db.categoryDao()
     }
 
-
+    @Provides
+    @Singleton
+    fun provideComparisonRepository(supabase: SupabaseClient): ComparisonRepository {
+        return ComparisonRepositoryImp(supabase)
+    }
 }

@@ -73,6 +73,7 @@ import com.burixer85.aipedia.core.presentation.component.FeatureDetailModal
 import com.burixer85.aipedia.core.presentation.component.PricePill
 import com.burixer85.aipedia.core.util.localizedDescription
 import com.burixer85.aipedia.core.util.localizedName
+import com.burixer85.aipedia.core.util.localizedTagline
 import com.burixer85.aipedia.ui.theme.MdBackground
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceMuted
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceStrong
@@ -197,6 +198,16 @@ fun DetailScreen(
                                     letterSpacing = (-0.8).sp,
                                     lineHeight = 34.sp
                                 )
+                                ai.localizedTagline()?.takeIf { it.isNotBlank() }?.let { tagline ->
+                                    Spacer(modifier = Modifier.height(6.dp))
+                                    Text(
+                                        text = tagline,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        color = MdOnSurfaceVariant,
+                                        lineHeight = 18.sp
+                                    )
+                                }
                                 if (ai.categories?.isNotEmpty() == true) {
                                     Spacer(modifier = Modifier.height(6.dp))
                                     Text(
@@ -238,6 +249,13 @@ fun DetailScreen(
                         modifier = Modifier.padding(horizontal = 22.dp)
                     )
 
+                    // Comparison data sections
+                    uiState.comparison?.let { comparison ->
+                        SpecsSection(specs = comparison.specs)
+                        PricingSection(plans = comparison.plans)
+                        ProsConsSection(pros = comparison.pros, cons = comparison.cons)
+                    }
+
                     // Features section
                     if (ai.features.isNotEmpty()) {
                         Spacer(modifier = Modifier.height(28.dp))
@@ -278,6 +296,12 @@ fun DetailScreen(
                                 PlatformChip(name = platform.name, icon = platform.icon)
                             }
                         }
+                    }
+
+                    // Integrations & use cases sections
+                    uiState.comparison?.let { comparison ->
+                        IntegrationsSection(integrations = comparison.integrations)
+                        UseCasesSection(useCases = comparison.useCases)
                     }
 
                     // Valoración section

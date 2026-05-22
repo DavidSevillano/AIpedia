@@ -16,7 +16,7 @@ import com.burixer85.aipedia.core.data.local.entity.PlatformEntity
     entities = [AiEntity::class, CategoryEntity::class, AiCategoryCrossRef::class,
         FeatureEntity::class, AiFeatureCrossRef::class, PlatformEntity::class,
         AiPlatformCrossRef::class],
-    version = 10,
+    version = 11,
     exportSchema = false
 )
 abstract class AipediaDatabase : RoomDatabase() {

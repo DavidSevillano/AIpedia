@@ -41,7 +41,7 @@ class HomeRepositoryImp @Inject constructor(
     override suspend fun loadAndCacheInitialData() {
         try {
             val supabaseAis = supabase.from("ai")
-                .select(columns = Columns.raw("*, categories(*), features(*), platforms(*)"))
+                .select(columns = Columns.raw("*, categories(*), capabilities(*), platforms(*)"))
                 .decodeList<Ai>()
 
             if (supabaseAis.isEmpty()) return

@@ -19,6 +19,18 @@ data class AiEntity(
     @ColumnInfo(name = "logo_url")
     val logoUrl: String,
     @ColumnInfo(name = "is_published")
-    val isPublished: Boolean = true
-
+    val isPublished: Boolean = true,
+    val company: String? = null,
+    @ColumnInfo(name = "release_year")
+    val releaseYear: Int? = null,
+    @ColumnInfo(name = "has_api")
+    val hasApi: Boolean = false,
+    @ColumnInfo(name = "has_free_tier")
+    val hasFreeTier: Boolean = false,
+    @ColumnInfo(name = "starting_price")
+    val startingPrice: Double? = null,
+    @ColumnInfo(name = "tagline_es")
+    val taglineEs: String? = null,
+    @ColumnInfo(name = "tagline_en")
+    val taglineEn: String? = null,
 )

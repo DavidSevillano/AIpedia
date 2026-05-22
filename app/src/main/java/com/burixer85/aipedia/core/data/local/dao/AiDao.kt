@@ -45,7 +45,7 @@ interface AiDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAiFeatureCrossRefs(crossRefs: List<AiFeatureCrossRef>)
 
-    @Query("DELETE FROM features")
+    @Query("DELETE FROM capabilities")
     suspend fun deleteAllFeatures()
 
     @Query("DELETE FROM aifeaturecrossref")

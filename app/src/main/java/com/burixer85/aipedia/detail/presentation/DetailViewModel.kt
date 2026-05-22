@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.burixer85.aipedia.auth.domain.model.AuthUser
 import com.burixer85.aipedia.auth.domain.usecase.GetCurrentUserUseCase
 import com.burixer85.aipedia.core.domain.model.Ai
+import com.burixer85.aipedia.core.domain.model.ComparisonData
+import com.burixer85.aipedia.core.domain.usecase.GetComparisonDataUseCase
 import com.burixer85.aipedia.detail.domain.usecase.GetAiUseCase
 import com.burixer85.aipedia.ratings.domain.model.RatingSummary
 import com.burixer85.aipedia.ratings.domain.model.Review
@@ -24,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val getAiUseCase: GetAiUseCase,
+    private val getComparisonDataUseCase: GetComparisonDataUseCase,
     private val getRatingSummaryUseCase: GetRatingSummaryUseCase,
     private val getReviewsUseCase: GetReviewsUseCase,
     private val getUserRatingUseCase: GetUserRatingUseCase,
@@ -40,6 +43,12 @@ class DetailViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
             val ai = getAiUseCase(UUID.fromString(id))
             _uiState.update { it.copy(ai = ai, isLoading = false) }
+        }
+        viewModelScope.launch {
+            try {
+                val comparison = getComparisonDataUseCase(id)
+                _uiState.update { it.copy(comparison = comparison) }
+            } catch (_: Exception) {}
         }
         viewModelScope.launch {
             getCurrentUserUseCase().collect { user ->
@@ -99,4 +108,5 @@ data class DetailScreenUI(
     val reviews: List<Review> = emptyList(),
     val currentUser: AuthUser? = null,
     val userRating: Int = 0,
+    val comparison: ComparisonData? = null,
 )
