@@ -24,8 +24,8 @@ android {
         applicationId = "com.burixer85.aipedia"
         minSdk = 24
         targetSdk = 35
-        versionCode = 8
-        versionName = "1.0"
+        versionCode = 9
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -97,6 +97,7 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.play.services.ads)
+    implementation(libs.play.app.update)
 
     // Tests
     testImplementation(libs.mockk)
