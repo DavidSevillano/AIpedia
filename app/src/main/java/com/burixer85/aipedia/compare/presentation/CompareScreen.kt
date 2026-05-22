@@ -36,8 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import com.burixer85.aipedia.core.domain.model.Ai
+import com.burixer85.aipedia.core.presentation.component.AiLogoPlaceholder
 import com.burixer85.aipedia.core.domain.model.AiSpec
 import com.burixer85.aipedia.core.domain.model.ComparisonData
 import com.burixer85.aipedia.core.domain.model.PricingPlan
@@ -127,6 +129,7 @@ fun CompareScreen(
     if (uiState.pickerTarget != null) {
         AiPickerBottomSheet(
             ais = uiState.filteredAis,
+            allAisLoaded = uiState.allAisLoaded,
             query = uiState.pickerQuery,
             onQueryChange = viewModel::onQueryChange,
             onSelect = viewModel::selectAi,
@@ -168,12 +171,15 @@ private fun AiSlotCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = ai.logo,
                     contentDescription = ai.name,
                     modifier = Modifier
                         .size(32.dp)
-                        .clip(RoundedCornerShape(7.dp))
+                        .clip(RoundedCornerShape(7.dp)),
+                    loading = { AiLogoPlaceholder(name = ai.name, modifier = Modifier.fillMaxSize()) },
+                    error = { AiLogoPlaceholder(name = ai.name, modifier = Modifier.fillMaxSize()) },
+                    success = { SubcomposeAsyncImageContent() }
                 )
                 Text(
                     text = ai.name,

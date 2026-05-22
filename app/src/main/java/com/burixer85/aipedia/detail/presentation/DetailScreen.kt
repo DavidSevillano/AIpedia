@@ -67,8 +67,7 @@ import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.burixer85.aipedia.R
 import com.burixer85.aipedia.core.domain.model.Feature
-import com.burixer85.aipedia.core.presentation.component.AIpediaImageError
-import com.burixer85.aipedia.core.presentation.component.AiPediaImagePlaceholder
+import com.burixer85.aipedia.core.presentation.component.AiLogoPlaceholder
 import com.burixer85.aipedia.core.presentation.component.FeatureDetailModal
 import com.burixer85.aipedia.core.presentation.component.PricePill
 import com.burixer85.aipedia.core.util.localizedDescription
@@ -178,8 +177,8 @@ fun DetailScreen(
                                 .size(92.dp)
                                 .clip(RoundedCornerShape(26.dp)),
                             contentScale = ContentScale.Crop,
-                            loading = { AiPediaImagePlaceholder() },
-                            error = { AIpediaImageError() }
+                            loading = { AiLogoPlaceholder(name = ai.name, modifier = Modifier.fillMaxSize()) },
+                            error = { AiLogoPlaceholder(name = ai.name, modifier = Modifier.fillMaxSize()) }
                         )
 
                         Spacer(modifier = Modifier.height(18.dp))

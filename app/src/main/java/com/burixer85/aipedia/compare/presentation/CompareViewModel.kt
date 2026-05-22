@@ -29,6 +29,7 @@ data class CompareUiState(
     val comparisonB: ComparisonData? = null,
     val pickerTarget: PickerTarget? = null,
     val allAis: List<Ai> = emptyList(),
+    val allAisLoaded: Boolean = false,
     val pickerQuery: String = ""
 ) {
     val filteredAis: List<Ai>
@@ -50,7 +51,7 @@ class CompareViewModel @Inject constructor(
         viewModelScope.launch {
             getAllAisForPickerUseCase()
                 .catch { }
-                .collect { ais -> _uiState.update { it.copy(allAis = ais) } }
+                .collect { ais -> _uiState.update { it.copy(allAis = ais, allAisLoaded = true) } }
         }
     }
 

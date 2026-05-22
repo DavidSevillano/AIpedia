@@ -24,17 +24,16 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.compose.foundation.layout.fillMaxSize
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import com.burixer85.aipedia.core.domain.model.Ai
+import com.burixer85.aipedia.core.presentation.component.AiLogoPlaceholder
 import com.burixer85.aipedia.core.presentation.component.AIpediaEmptyState
 import com.burixer85.aipedia.core.presentation.component.PricePill
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceMuted
@@ -48,14 +47,13 @@ import com.burixer85.aipedia.ui.theme.MdSurfaceHigh
 @Composable
 fun AiPickerBottomSheet(
     ais: List<Ai>,
+    allAisLoaded: Boolean,
     query: String,
     onQueryChange: (String) -> Unit,
     onSelect: (Ai) -> Unit,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) { focusRequester.requestFocus() }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -80,15 +78,14 @@ fun AiPickerBottomSheet(
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .focusRequester(focusRequester),
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MdPrimary,
                     unfocusedBorderColor = MdOutline,
                     cursorColor = MdPrimary
                 )
             )
-            if (ais.isEmpty()) {
+            if (allAisLoaded && ais.isEmpty()) {
                 AIpediaEmptyState()
             } else {
                 LazyColumn(
@@ -117,12 +114,15 @@ private fun AiPickerRow(ai: Ai, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        AsyncImage(
+        SubcomposeAsyncImage(
             model = ai.logo,
             contentDescription = ai.name,
             modifier = Modifier
                 .size(36.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(8.dp)),
+            loading = { AiLogoPlaceholder(name = ai.name, modifier = Modifier.fillMaxSize()) },
+            error = { AiLogoPlaceholder(name = ai.name, modifier = Modifier.fillMaxSize()) },
+            success = { SubcomposeAsyncImageContent() }
         )
         Text(
             text = ai.name,

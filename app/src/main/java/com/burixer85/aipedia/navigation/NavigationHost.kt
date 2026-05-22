@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Compare
 import androidx.compose.material.icons.filled.Home
@@ -163,23 +164,19 @@ private fun SharedBottomNav(
     onItemSelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .padding(horizontal = 16.dp)
-            .navigationBarsPadding()
-            .padding(bottom = 12.dp)
+    Surface(
+        shape = RectangleShape,
+        color = Color(0xFF1C2026),
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
+        modifier = modifier.fillMaxWidth()
     ) {
-        Surface(
-            shape = RoundedCornerShape(32.dp),
-            color = Color(0xD91C2026),
-            tonalElevation = 0.dp,
-            shadowElevation = 20.dp,
-            modifier = Modifier.fillMaxWidth()
+        Row(
+            modifier = Modifier
+                .navigationBarsPadding()
+                .padding(6.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Row(
-                modifier = Modifier.padding(6.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
                 navItems.forEach { item ->
                     NavBarItem(
                         item = item,
@@ -190,7 +187,6 @@ private fun SharedBottomNav(
                 }
             }
         }
-    }
 }
 
 @Composable
