@@ -83,13 +83,13 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun uiState_stays_Loading_when_user_is_null() = runTest {
+    fun uiState_is_NotLoggedIn_when_user_is_null() = runTest {
         every { getCurrentUserUseCase() } returns flowOf(null)
 
         val viewModel = ProfileViewModel(getCurrentUserUseCase, getUserReviewsUseCase, signOutUseCase)
         advanceUntilIdle()
 
-        assert(viewModel.uiState.value is ProfileUiState.Loading)
+        assert(viewModel.uiState.value is ProfileUiState.NotLoggedIn)
     }
 
     @Test
