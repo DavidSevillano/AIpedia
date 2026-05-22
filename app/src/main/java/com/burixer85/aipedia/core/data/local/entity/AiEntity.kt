@@ -17,7 +17,7 @@ data class AiEntity(
     @ColumnInfo(name = "price_model")
     val priceModel: String,
     @ColumnInfo(name = "logo_url")
-    val logoUrl: String,
+    val logoUrl: String? = null,
     @ColumnInfo(name = "is_published")
     val isPublished: Boolean = true,
     val company: String? = null,

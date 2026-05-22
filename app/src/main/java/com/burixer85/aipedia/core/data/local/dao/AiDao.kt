@@ -10,6 +10,7 @@ import com.burixer85.aipedia.core.data.local.entity.AiEntity
 import com.burixer85.aipedia.core.data.local.entity.AiFeatureCrossRef
 import com.burixer85.aipedia.core.data.local.entity.AiPlatformCrossRef
 import com.burixer85.aipedia.core.data.local.entity.AiWithCategories
+import com.burixer85.aipedia.core.data.local.entity.AiWithOnlyCategories
 import com.burixer85.aipedia.core.data.local.entity.FeatureEntity
 import com.burixer85.aipedia.core.data.local.entity.PlatformEntity
 import kotlinx.coroutines.flow.Flow
@@ -18,11 +19,14 @@ import kotlinx.coroutines.flow.Flow
 interface AiDao {
     @Transaction
     @Query("SELECT * FROM ai WHERE is_published = 1")
-    fun getAllAis(): Flow<List<AiWithCategories>>
+    fun getAllAis(): Flow<List<AiWithOnlyCategories>>
 
     @Transaction
     @Query("SELECT * FROM ai WHERE id = :aiId AND is_published = 1")
     fun getAiById(aiId: String): AiWithCategories?
+
+    @Query("SELECT COUNT(*) FROM ai")
+    suspend fun getCount(): Int
 
     @Query("DELETE FROM ai")
     suspend fun deleteAllAis()

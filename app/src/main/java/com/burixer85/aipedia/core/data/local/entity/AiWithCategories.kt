@@ -54,3 +54,39 @@ fun AiWithCategories.toDomain(): Ai {
         taglineEn = this.ai.taglineEn,
     )
 }
+
+// Lightweight projection for list screens — skips features and platforms
+data class AiWithOnlyCategories(
+    @Embedded val ai: AiEntity,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "id",
+        associateBy = Junction(
+            AiCategoryCrossRef::class,
+            parentColumn = "aiId",
+            entityColumn = "categoryId"
+        )
+    )
+    val categories: List<CategoryEntity>
+)
+
+fun AiWithOnlyCategories.toDomain(): Ai {
+    return Ai(
+        id = this.ai.id,
+        name = this.ai.name,
+        descriptionEs = this.ai.descriptionEs,
+        descriptionEn = this.ai.descriptionEn,
+        website = this.ai.website,
+        priceModel = this.ai.priceModel,
+        logo = this.ai.logoUrl,
+        categories = this.categories.map { it.toDomain() },
+        isPublished = this.ai.isPublished,
+        company = this.ai.company,
+        releaseYear = this.ai.releaseYear,
+        hasApi = this.ai.hasApi,
+        hasFreeTier = this.ai.hasFreeTier,
+        startingPrice = this.ai.startingPrice,
+        taglineEs = this.ai.taglineEs,
+        taglineEn = this.ai.taglineEn,
+    )
+}

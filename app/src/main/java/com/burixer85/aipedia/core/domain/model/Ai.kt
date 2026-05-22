@@ -16,7 +16,7 @@ data class Ai(
     @SerialName("price_model")
     val priceModel: String,
     @SerialName("logo_url")
-    val logo: String,
+    val logo: String? = null,
     val categories: List<Category> = emptyList(),
     @SerialName("capabilities")
     val features: List<Feature> = emptyList(),
