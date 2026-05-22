@@ -5,6 +5,7 @@ import com.burixer85.aipedia.core.data.local.dao.AiDao
 import com.burixer85.aipedia.core.data.local.dao.CategoryDao
 import com.burixer85.aipedia.core.data.local.entity.AiCategoryCrossRef
 import com.burixer85.aipedia.core.data.local.entity.toDomain
+import com.burixer85.aipedia.core.data.local.entity.AiWithOnlyCategories
 import com.burixer85.aipedia.home.domain.repository.HomeRepository
 import com.burixer85.aipedia.core.domain.model.Ai
 import com.burixer85.aipedia.core.domain.model.toData
@@ -85,7 +86,6 @@ class HomeRepositoryImp @Inject constructor(
             categoryDao.insertAll(categoryEntities)
 
             aiDao.updateData(aiEntities, categoryRefs, featureRefs, platformRefs)
-
 
         } catch (e: Exception) {
             Log.e("HomeRepository", "Error en la sincronización: ${e.message}")

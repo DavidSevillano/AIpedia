@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +38,6 @@ import com.burixer85.aipedia.core.presentation.component.AiPediaCard
 import com.burixer85.aipedia.core.presentation.component.AiPediaCardPlaceholder
 import com.burixer85.aipedia.core.presentation.component.AiPediaSearchBar
 import com.burixer85.aipedia.core.presentation.component.CategoryChipItem
-import com.burixer85.aipedia.core.util.AdConfig
 import com.burixer85.aipedia.core.util.localizedName
 import com.burixer85.aipedia.ui.theme.MdBackground
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceMuted
@@ -61,7 +59,7 @@ fun HomeScreen(
             contentPadding = PaddingValues(bottom = 120.dp)
         ) {
             // Header: eyebrow + title
-            item {
+            item(key = "header") {
                 Column(modifier = Modifier.padding(horizontal = 22.dp)) {
                     Spacer(
                         modifier = Modifier
@@ -94,7 +92,7 @@ fun HomeScreen(
             }
 
             // Category filter chips
-            item {
+            item(key = "categories") {
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 22.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -117,7 +115,7 @@ fun HomeScreen(
             }
 
             // Section heading
-            item {
+            item(key = "section_heading") {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -136,12 +134,6 @@ fun HomeScreen(
                             color = MdOnSurfaceStrong,
                             letterSpacing = (-0.285).sp
                         )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text = "${uiState.aiList.size} ${if (uiState.aiList.size == 1) "resultado" else "resultados"}",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MdOnSurfaceVariant
-                        )
                     }
                 }
             }
@@ -149,7 +141,7 @@ fun HomeScreen(
             // List states
             when {
                 uiState.isLoading -> {
-                    items(5) {
+                    items(5, key = { "placeholder_$it" }) {
                         AiPediaCardPlaceholder(
                             modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp)
                         )
@@ -157,7 +149,7 @@ fun HomeScreen(
                 }
 
                 uiState.errorMessage != null -> {
-                    item {
+                    item(key = "error") {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -169,8 +161,8 @@ fun HomeScreen(
                     }
                 }
 
-                uiState.aiList.isEmpty() -> {
-                    item {
+                uiState.items.isEmpty() -> {
+                    item(key = "empty") {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -183,43 +175,42 @@ fun HomeScreen(
                 }
 
                 else -> {
-                    val firstAdIndex = AdConfig.FIRST_AD_INDEX
-                    val frequency = AdConfig.FREQUENCY
-
-                    itemsIndexed(
-                        items = uiState.aiList,
-                        key = { _, ai -> ai.id }
-                    ) { index, ai ->
-                        Column(modifier = Modifier.padding(horizontal = 14.dp)) {
-                            AiPediaCard(
-                                name = ai.name,
-                                category = ai.categories?.firstOrNull()?.localizedName(),
-                                price = ai.priceModel,
-                                logo = ai.logo,
-                                onClick = { onAiClick(ai.id) }
-                            )
-
-                            val isFirstAd = index == firstAdIndex
-                            val isLaterAd = index > firstAdIndex &&
-                                (index - firstAdIndex) % frequency == 0
-
-                            if (isFirstAd || isLaterAd) {
-                                val adIdx = if (isFirstAd) 0
-                                else (index - firstAdIndex) / frequency
-                                if (adIdx < uiState.adPool.size) {
-                                    AIpediaNativeAdItem(
-                                        nativeAd = uiState.adPool[adIdx],
-                                        modifier = Modifier.padding(vertical = 8.dp)
-                                    )
-                                }
+                    items(
+                        items = uiState.items,
+                        key = { item ->
+                            when (item) {
+                                is HomeListItem.AiCard -> item.ai.id
+                                is HomeListItem.AdCard -> "ad_${item.nativeAd.hashCode()}"
                             }
-
-                            Spacer(modifier = Modifier.height(8.dp))
+                        },
+                        contentType = { item ->
+                            when (item) {
+                                is HomeListItem.AiCard -> "ai_card"
+                                is HomeListItem.AdCard -> "ad_card"
+                            }
+                        }
+                    ) { item ->
+                        when (item) {
+                            is HomeListItem.AiCard -> Column(
+                                modifier = Modifier.padding(horizontal = 14.dp)
+                            ) {
+                                AiPediaCard(
+                                    name = item.ai.name,
+                                    category = item.ai.categoryName,
+                                    price = item.ai.priceModel,
+                                    logo = item.ai.logo,
+                                    onClick = { onAiClick(item.ai.id) }
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
+                            is HomeListItem.AdCard -> AIpediaNativeAdItem(
+                                nativeAd = item.nativeAd,
+                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
+                            )
                         }
                     }
                 }
             }
         }
-
     }
 }

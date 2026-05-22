@@ -17,7 +17,11 @@ import javax.inject.Singleton
 object HomeModule {
     @Provides
     @Singleton
-    fun provideHomeRepository(aiDao: AiDao, categoryDao: CategoryDao, supabaseClient: SupabaseClient): HomeRepository {
+    fun provideHomeRepository(
+        aiDao: AiDao,
+        categoryDao: CategoryDao,
+        supabaseClient: SupabaseClient
+    ): HomeRepository {
         return HomeRepositoryImp(aiDao, categoryDao, supabaseClient)
     }
 

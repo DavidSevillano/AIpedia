@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,25 +26,55 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
+import coil.request.ImageRequest
+import coil.size.Size
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceMuted
 import com.burixer85.aipedia.ui.theme.MdSurfaceLow
-import com.burixer85.aipedia.ui.theme.TagFreeBg
 import com.burixer85.aipedia.ui.theme.TagFree
+import com.burixer85.aipedia.ui.theme.TagFreeBg
 import com.burixer85.aipedia.ui.theme.TagFreemium
 import com.burixer85.aipedia.ui.theme.TagFreemiumBg
 import com.burixer85.aipedia.ui.theme.TagPaid
 import com.burixer85.aipedia.ui.theme.TagPaidBg
+
+private val logoPlaceholderColors = listOf(
+    Color(0xFF354479) to Color(0xFFB5C5FF), // blue
+    Color(0xFF2D4A3E) to Color(0xFF7ECFB0), // green
+    Color(0xFF4A2D4A) to Color(0xFFD4A0D4), // purple
+    Color(0xFF4A3A2D) to Color(0xFFD4B07E), // amber
+    Color(0xFF2D3D4A) to Color(0xFF7EB8D4), // cyan
+    Color(0xFF4A2D35) to Color(0xFFD47E8A), // rose
+)
+
+@Composable
+fun AiLogoPlaceholder(name: String, modifier: Modifier = Modifier) {
+    val index = (name.hashCode() and 0x7FFFFFFF) % logoPlaceholderColors.size
+    val (bg, fg) = logoPlaceholderColors[index]
+    Box(
+        modifier = modifier.background(bg),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = name.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
+            color = fg,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
 
 @Composable
 fun AiPediaCard(
     name: String,
     category: String?,
     price: String,
-    logo: String,
+    logo: String?,
     onClick: () -> Unit
 ) {
     Card(
@@ -57,15 +88,22 @@ fun AiPediaCard(
             modifier = Modifier.padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            val context = LocalContext.current
             SubcomposeAsyncImage(
-                model = logo,
+                model = ImageRequest.Builder(context)
+                    .data(logo)
+                    .size(Size(168, 168))
+                    .build(),
                 contentDescription = name,
                 modifier = Modifier
                     .size(56.dp)
                     .clip(RoundedCornerShape(16.dp)),
                 contentScale = ContentScale.Crop,
-                loading = { AiPediaImagePlaceholder() },
-                error = { AIpediaImageError() }
+                loading = { Box(modifier = Modifier.fillMaxSize()) },
+                error = {
+                    AiLogoPlaceholder(name = name, modifier = Modifier.fillMaxSize())
+                },
+                success = { SubcomposeAsyncImageContent() }
             )
 
             Spacer(modifier = Modifier.width(14.dp))
