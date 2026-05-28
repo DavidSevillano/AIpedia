@@ -38,6 +38,7 @@ import com.burixer85.aipedia.core.presentation.component.AiPediaCard
 import com.burixer85.aipedia.core.presentation.component.AiPediaCardPlaceholder
 import com.burixer85.aipedia.core.presentation.component.AiPediaSearchBar
 import com.burixer85.aipedia.core.presentation.component.CategoryChipItem
+import com.burixer85.aipedia.core.presentation.component.CategoryChipPlaceholder
 import com.burixer85.aipedia.core.util.localizedName
 import com.burixer85.aipedia.ui.theme.MdBackground
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceMuted
@@ -104,12 +105,23 @@ fun HomeScreen(
                             onClick = { homeViewmodel.onCategorySelected(null) }
                         )
                     }
-                    items(uiState.categories) { category ->
-                        CategoryChipItem(
-                            label = category.localizedName(),
-                            selected = uiState.selectedCategory == category,
-                            onClick = { homeViewmodel.onCategorySelected(category) }
-                        )
+                    if (uiState.isLoading && uiState.categories.isEmpty()) {
+                        items(4, key = { "cat_placeholder_$it" }) { index ->
+                            val width = when (index % 3) {
+                                0 -> 80.dp
+                                1 -> 64.dp
+                                else -> 96.dp
+                            }
+                            CategoryChipPlaceholder(width = width)
+                        }
+                    } else {
+                        items(uiState.categories) { category ->
+                            CategoryChipItem(
+                                label = category.localizedName(),
+                                selected = uiState.selectedCategory == category,
+                                onClick = { homeViewmodel.onCategorySelected(category) }
+                            )
+                        }
                     }
                 }
             }

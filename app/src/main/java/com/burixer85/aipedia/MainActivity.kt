@@ -2,7 +2,6 @@ package com.burixer85.aipedia
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,11 +39,7 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         appUpdateManager = AppUpdateManagerFactory.create(this)
-        enableEdgeToEdge(
-            navigationBarStyle = SystemBarStyle.dark(
-                android.graphics.Color.rgb(0x1C, 0x20, 0x26)
-            )
-        )
+        enableEdgeToEdge()
         setContent {
             AIpediaTheme {
                 Surface(
@@ -65,16 +60,22 @@ class MainActivity : ComponentActivity() {
     private fun checkForUpdate() {
         appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
             if (isFinishing || isDestroyed) return@addOnSuccessListener
-            val priority = info.updatePriority()
             val available = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
             val allowed = info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
-            if (available && priority >= UpdateConfig.MIN_UPDATE_PRIORITY && allowed) {
-                appUpdateManager.startUpdateFlowForResult(
-                    info,
-                    updateLauncher,
-                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
-                )
+
+            if (available && allowed) {
+                // MIN_UPDATE_PRIORITY = 0 forces all updates, >= 4 only forces critical updates
+                val priority = info.updatePriority()
+                if (priority >= UpdateConfig.MIN_UPDATE_PRIORITY) {
+                    appUpdateManager.startUpdateFlowForResult(
+                        info,
+                        updateLauncher,
+                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                    )
+                }
             }
+        }.addOnFailureListener {
+            // Silently fail on update check errors
         }
     }
 }

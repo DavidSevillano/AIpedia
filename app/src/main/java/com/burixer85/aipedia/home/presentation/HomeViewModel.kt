@@ -84,8 +84,9 @@ class HomeViewModel @Inject constructor(
             _originalAiList,
             _searchText.debounce(300L),
             _selectedCategory,
-            adRepository.adPool
-        ) { originalList, searchText, selectedCategory, adPool ->
+            adRepository.adPool,
+            getAllAisUseCase.syncCompleted
+        ) { originalList, searchText, selectedCategory, adPool, syncCompleted ->
             val isSpanish = context.resources.configuration.locales[0].language == "es"
 
             val filteredSummaries = originalList
@@ -99,16 +100,17 @@ class HomeViewModel @Inject constructor(
                 .map { ai -> ai.toSummary(isSpanish) }
 
             val mergedItems = mergeAdsIntoList(filteredSummaries, adPool)
-            Triple(mergedItems, selectedCategory, searchText)
+            Pair(Triple(mergedItems, selectedCategory, searchText), syncCompleted)
         }
             .flowOn(Dispatchers.Default)
-            .onEach { (items, selectedCat, searchTxt) ->
+            .onEach { (triple, syncCompleted) ->
+                val (items, selectedCat, searchTxt) = triple
                 _uiState.update {
                     it.copy(
                         items = items,
                         selectedCategory = selectedCat,
                         searchText = searchTxt,
-                        isLoading = false
+                        isLoading = if (syncCompleted) false else it.isLoading
                     )
                 }
             }

@@ -13,11 +13,11 @@ data class FeatureEntity(
     @ColumnInfo(name = "name_en")
     val nameEn: String,
     @ColumnInfo(name = "description_es")
-    val descriptionEs: String,
+    val descriptionEs: String? = null,
     @ColumnInfo(name = "description_en")
-    val descriptionEn: String,
+    val descriptionEn: String? = null,
     @ColumnInfo(name = "icon_url")
-    val iconUrl: String
+    val iconUrl: String? = null
 )
 
 fun FeatureEntity.toDomain(): Feature{

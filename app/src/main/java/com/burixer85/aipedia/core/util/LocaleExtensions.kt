@@ -33,7 +33,7 @@ fun Feature.localizedName(): String =
 
 @Composable
 fun Feature.localizedDescription(): String =
-    if (isSpanish()) descriptionEs else descriptionEn
+    if (isSpanish()) descriptionEs.orEmpty() else descriptionEn.orEmpty()
 
 @Composable
 fun Platform.localizedName(): String =

@@ -24,8 +24,8 @@ android {
         applicationId = "com.burixer85.aipedia"
         minSdk = 24
         targetSdk = 35
-        versionCode = 9
-        versionName = "1.2"
+        versionCode = 11
+        versionName = "1.3.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

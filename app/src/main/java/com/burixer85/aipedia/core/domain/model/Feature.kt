@@ -12,11 +12,11 @@ data class Feature(
     @SerialName("name_en")
     val nameEn: String,
     @SerialName("description_es")
-    val descriptionEs: String,
+    val descriptionEs: String? = null,
     @SerialName("description_en")
-    val descriptionEn: String,
+    val descriptionEn: String? = null,
     @SerialName("icon_url")
-    val icon: String
+    val icon: String? = null
 )
 
 fun Feature.toData(): FeatureEntity {
