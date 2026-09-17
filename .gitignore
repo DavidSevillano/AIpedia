@@ -43,3 +43,7 @@ CLAUDE.md
 # Superpowers
 .superpowers/
 docs/superpowers/
+
+# Signing / publishing secrets
+keystore.properties
+play-service-account.json
