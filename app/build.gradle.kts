@@ -59,7 +59,7 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.findByName("release")
-            isMinifyEnabled = false
+            isMinifyEnabled = true
 
             buildConfigField("String", "NATIVE_AD_ID", "\"${localProperties.getProperty("admob.native.id")}\"")
 
