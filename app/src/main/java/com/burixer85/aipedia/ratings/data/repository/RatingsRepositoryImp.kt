@@ -1,7 +1,6 @@
 package com.burixer85.aipedia.ratings.data.repository
 
 import com.burixer85.aipedia.ratings.data.model.RatingDto
-import com.burixer85.aipedia.ratings.data.model.RatingInsertDto
 import com.burixer85.aipedia.ratings.data.model.ReviewDto
 import com.burixer85.aipedia.ratings.data.model.ReviewInsertDto
 import com.burixer85.aipedia.ratings.domain.model.RatingSummary
@@ -9,6 +8,9 @@ import com.burixer85.aipedia.ratings.domain.model.Review
 import com.burixer85.aipedia.ratings.domain.repository.RatingsRepository
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import javax.inject.Inject
 
 class RatingsRepositoryImp @Inject constructor(
@@ -56,9 +58,14 @@ class RatingsRepositoryImp @Inject constructor(
             .firstOrNull()?.toDomain()
 
     override suspend fun submitRating(aiId: String, deviceId: String, score: Int) {
-        supabase.from("ai_ratings").upsert(
-            RatingInsertDto(aiId = aiId, deviceId = deviceId, score = score)
-        ) { onConflict = "ai_id,device_id" }
+        supabase.postgrest.rpc(
+            "submit_rating",
+            buildJsonObject {
+                put("p_ai_id", aiId)
+                put("p_device_id", deviceId)
+                put("p_score", score)
+            }
+        )
     }
 
     override suspend fun submitReview(

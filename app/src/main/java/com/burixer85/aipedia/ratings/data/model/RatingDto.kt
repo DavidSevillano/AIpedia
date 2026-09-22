@@ -11,9 +11,3 @@ data class RatingDto(
     @SerialName("score") val score: Int
 )
 
-@Serializable
-data class RatingInsertDto(
-    @SerialName("ai_id") val aiId: String,
-    @SerialName("device_id") val deviceId: String,
-    @SerialName("score") val score: Int
-)
