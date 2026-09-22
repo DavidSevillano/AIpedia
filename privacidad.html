@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Política de Privacidad · AIpedia</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1a1a; --muted: #555; --accent: #1e1e50; --line: #e3e3e8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #14141a; --fg: #e8e8ee; --muted: #a0a0ad; --accent: #8ba0ff; --line: #2a2a35; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 48px 16px 80px; }
+  h1 { font-size: 1.9rem; line-height: 1.25; margin: 0 0 6px; }
+  h2 { font-size: 1.15rem; margin: 38px 0 10px; color: var(--accent); }
+  .fecha { color: var(--muted); font-size: .9rem; margin-bottom: 32px; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: .95rem; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: .85rem; text-transform: uppercase; letter-spacing: .03em; }
+  ul { padding-left: 20px; }
+  li { margin: 5px 0; }
+  a { color: var(--accent); }
+  footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+  code { background: var(--line); padding: 1px 5px; border-radius: 4px; font-size: .9em; }
+</style>
+</head>
+<body>
+<main>
+
+  <h1>Política de Privacidad de AIpedia</h1>
+  <p class="fecha">Última actualización: 22 de septiembre de 2026</p>
+
+  <p>
+    AIpedia es una aplicación Android que permite consultar y comparar herramientas de
+    inteligencia artificial. Esta política explica qué datos recoge la aplicación, con qué
+    finalidad, dónde se almacenan y qué derechos tienes sobre ellos.
+  </p>
+  <p>
+    El responsable del tratamiento es <strong>David Sevillano Domínguez</strong>, desarrollador
+    de la aplicación, con contacto en
+    <a href="mailto:burideveloper@gmail.com">burideveloper@gmail.com</a>.
+  </p>
+
+  <h2>1. Qué datos recogemos</h2>
+
+  <p>Puedes usar AIpedia sin crear ninguna cuenta. En ese caso solo se recoge lo indicado como anónimo.</p>
+
+  <table>
+    <tr>
+      <th>Dato</th><th>Cuándo se recoge</th><th>Para qué</th>
+    </tr>
+    <tr>
+      <td>Identificador del dispositivo (<code>ANDROID_ID</code>)</td>
+      <td>Al puntuar una IA con estrellas, sin iniciar sesión</td>
+      <td>Registrar una única valoración por dispositivo y permitirte cambiarla después</td>
+    </tr>
+    <tr>
+      <td>Puntuación otorgada (1 a 5)</td>
+      <td>Al puntuar una IA</td>
+      <td>Calcular la media que se muestra a los demás usuarios</td>
+    </tr>
+    <tr>
+      <td>Correo electrónico y nombre de tu cuenta de Google</td>
+      <td>Solo si inicias sesión con Google</td>
+      <td>Identificar tu cuenta y mostrar tu nombre junto a las reseñas que publiques</td>
+    </tr>
+    <tr>
+      <td>Texto y puntuación de tus reseñas</td>
+      <td>Al publicar una reseña</td>
+      <td>Mostrarla públicamente en la ficha de la IA correspondiente</td>
+    </tr>
+    <tr>
+      <td>Identificador de publicidad y datos de uso</td>
+      <td>Al mostrarse anuncios</td>
+      <td>Mostrar publicidad, gestionada por Google AdMob</td>
+    </tr>
+  </table>
+
+  <p>
+    AIpedia <strong>no</strong> recoge tu ubicación, ni tu agenda de contactos, ni tus archivos,
+    ni accede a la cámara o al micrófono.
+  </p>
+
+  <h2>2. Contenido público</h2>
+  <p>
+    Las reseñas que publiques son <strong>públicas</strong>: cualquier persona que use la
+    aplicación podrá ver el nombre de tu cuenta de Google, tu puntuación y el texto que escribas.
+    Tu correo electrónico <strong>nunca</strong> se muestra a otros usuarios.
+  </p>
+  <p>
+    Las valoraciones con estrellas hechas sin iniciar sesión son anónimas: solo se guarda un
+    identificador técnico del dispositivo, que no permite identificarte personalmente.
+  </p>
+
+  <h2>3. Dónde se almacenan</h2>
+  <p>
+    Los datos de cuentas, valoraciones y reseñas se almacenan en
+    <a href="https://supabase.com/privacy" target="_blank" rel="noopener">Supabase</a>,
+    en servidores situados en la <strong>Unión Europea (Irlanda)</strong>.
+  </p>
+  <p>
+    La aplicación guarda además una copia local del catálogo de IAs en tu propio dispositivo,
+    para que funcione con mayor rapidez. Esa copia se elimina al desinstalar la aplicación.
+  </p>
+
+  <h2>4. Terceros</h2>
+  <ul>
+    <li>
+      <strong>Google</strong> — inicio de sesión con tu cuenta.
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Política de privacidad de Google</a>.
+    </li>
+    <li>
+      <strong>Google AdMob</strong> — publicidad dentro de la aplicación.
+      <a href="https://support.google.com/admob/answer/6128543" target="_blank" rel="noopener">Cómo usa AdMob los datos</a>.
+      Puedes limitar la publicidad personalizada desde los ajustes de Android, en
+      Google &rsaquo; Anuncios.
+    </li>
+    <li>
+      <strong>Supabase</strong> — alojamiento de la base de datos y gestión de sesiones.
+    </li>
+  </ul>
+  <p>No vendemos ni cedemos tus datos a ningún tercero con fines comerciales.</p>
+
+  <h2>5. Durante cuánto tiempo</h2>
+  <p>
+    Tus reseñas y valoraciones se conservan mientras la aplicación siga operativa o hasta que
+    solicites su eliminación. Si borras tu cuenta, se eliminan las reseñas asociadas a ella.
+  </p>
+
+  <h2>6. Tus derechos</h2>
+  <p>
+    Conforme al Reglamento General de Protección de Datos (RGPD), puedes ejercer tus derechos de
+    acceso, rectificación, supresión, limitación, portabilidad y oposición escribiendo a
+    <a href="mailto:burideveloper@gmail.com">burideveloper@gmail.com</a>.
+  </p>
+  <p>
+    Atenderemos tu solicitud en el plazo máximo de un mes. También puedes presentar una
+    reclamación ante la Agencia Española de Protección de Datos
+    (<a href="https://www.aepd.es" target="_blank" rel="noopener">aepd.es</a>).
+  </p>
+
+  <h2>7. Menores de edad</h2>
+  <p>
+    AIpedia no está dirigida a menores de 13 años y no recoge conscientemente datos de personas
+    de esa edad. Si detectas que un menor ha facilitado datos, escríbenos y los eliminaremos.
+  </p>
+
+  <h2>8. Cambios en esta política</h2>
+  <p>
+    Si esta política cambia, se actualizará esta misma página y se modificará la fecha indicada
+    al principio. Los cambios relevantes se comunicarán dentro de la aplicación.
+  </p>
+
+  <h2>9. Contacto</h2>
+  <p>
+    Para cualquier cuestión relacionada con tu privacidad:
+    <a href="mailto:burideveloper@gmail.com">burideveloper@gmail.com</a>
+  </p>
+
+  <footer>
+    AIpedia &middot; <a href="https://davidsevillano.github.io/AIpedia/">Volver a la página principal</a>
+  </footer>
+
+</main>
+</body>
+</html>
