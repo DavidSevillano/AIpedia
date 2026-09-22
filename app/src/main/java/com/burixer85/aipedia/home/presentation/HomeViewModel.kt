@@ -118,7 +118,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun Ai.toSummary(isSpanish: Boolean): AiSummary {
-        val cat = categories.firstOrNull()
+        val cat = categories.minByOrNull { if (isSpanish) it.nameEs else it.nameEn }
         return AiSummary(
             id = id,
             name = name,
