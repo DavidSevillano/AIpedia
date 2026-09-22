@@ -133,9 +133,17 @@ private fun ProfileLoadingContent() {
 
 @Composable
 private fun ProfileNotLoggedInContent(supabase: SupabaseClient) {
+    var signInError by remember { mutableStateOf<String?>(null) }
+
     val signInState = supabase.composeAuth.rememberSignInWithGoogle(
-        onResult = { },
-        fallback = {}
+        onResult = { result ->
+            signInError = when (result) {
+                is NativeSignInResult.NetworkError -> "Sin conexión. Inténtalo de nuevo."
+                is NativeSignInResult.Error -> "No se pudo iniciar sesión."
+                else -> null
+            }
+        },
+        fallback = { signInError = "Inicio de sesión no disponible en este dispositivo." }
     )
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -177,6 +185,14 @@ private fun ProfileNotLoggedInContent(supabase: SupabaseClient) {
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF333333)
+                )
+            }
+            signInError?.let {
+                Text(
+                    text = it,
+                    fontSize = 13.sp,
+                    color = MdOnSurfaceVariant,
+                    textAlign = TextAlign.Center
                 )
             }
             Text(

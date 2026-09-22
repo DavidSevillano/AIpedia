@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.burixer85.aipedia.ui.theme.MdOnSurfaceMuted
+import com.burixer85.aipedia.ui.theme.MdOnSurfaceVariant
 import com.burixer85.aipedia.ui.theme.MdSurfaceLow
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
@@ -48,16 +49,18 @@ fun AuthBottomSheet(
     onDismiss: () -> Unit,
     onAuthSuccess: () -> Unit
 ) {
+    var signInError by remember { mutableStateOf<String?>(null) }
+
     val signInState = supabase.composeAuth.rememberSignInWithGoogle(
         onResult = { result ->
             when (result) {
                 NativeSignInResult.Success -> { onDismiss(); onAuthSuccess() }
                 NativeSignInResult.ClosedByUser -> onDismiss()
-                is NativeSignInResult.Error -> onDismiss()
-                is NativeSignInResult.NetworkError -> onDismiss()
+                is NativeSignInResult.NetworkError -> signInError = "Sin conexión. Inténtalo de nuevo."
+                is NativeSignInResult.Error -> signInError = "No se pudo iniciar sesión."
             }
         },
-        fallback = {}
+        fallback = { signInError = "Inicio de sesión no disponible en este dispositivo." }
     )
 
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
@@ -91,6 +94,10 @@ fun AuthBottomSheet(
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF333333)
                 )
+            }
+            signInError?.let {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(it, fontSize = 13.sp, color = MdOnSurfaceVariant)
             }
             Spacer(modifier = Modifier.height(12.dp))
             Text(
